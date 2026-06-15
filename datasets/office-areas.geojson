@@ -1,0 +1,1575 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.62328445260592,
+              12.974584980577141
+            ],
+            [
+              77.61933810910783,
+              12.984206957538186
+            ],
+            [
+              77.60960946142609,
+              12.988273943117314
+            ],
+            [
+              77.59979783410155,
+              12.984403192648669
+            ],
+            [
+              77.59565138696804,
+              12.97486228723846
+            ],
+            [
+              77.59959863740177,
+              12.965240518890244
+            ],
+            [
+              77.60932669899996,
+              12.961174041283245
+            ],
+            [
+              77.61913741938885,
+              12.965044583139038
+            ],
+            [
+              77.62328445260592,
+              12.974584980577141
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "cbd-mg-road",
+        "name": "MG Road / Brigade Road / UB City",
+        "category": "Office/IT",
+        "submarket": "CBD",
+        "zone": "Central",
+        "key_landmarks": [
+          "UB City",
+          "Brigade Road",
+          "Vittal Mallya Road",
+          "Cunningham Road"
+        ],
+        "description": "Bangalore's traditional central business district, home to corporate HQs, premium retail, and legacy office stock.",
+        "radius_km": 1.5,
+        "centroid": [
+          77.609468,
+          12.974724
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.6383461089421,
+              12.935100898579128
+            ],
+            [
+              77.63440071110558,
+              12.944722899871417
+            ],
+            [
+              77.62467382978645,
+              12.948790120238261
+            ],
+            [
+              77.61486375245899,
+              12.944919677701414
+            ],
+            [
+              77.61071772980452,
+              12.935378971574048
+            ],
+            [
+              77.6146640329008,
+              12.92575717689974
+            ],
+            [
+              77.62439033146693,
+              12.921690464189789
+            ],
+            [
+              77.63419950353462,
+              12.925560700108626
+            ],
+            [
+              77.6383461089421,
+              12.935100898579128
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "koramangala",
+        "name": "Koramangala",
+        "category": "Office/IT",
+        "submarket": "SBD",
+        "zone": "Central-South",
+        "key_landmarks": [
+          "Forum Mall",
+          "Sony World Junction"
+        ],
+        "description": "Dense startup and tech hub with mixed residential-commercial development.",
+        "radius_km": 1.5,
+        "centroid": [
+          77.624532,
+          12.93524
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.65465190399306,
+              12.978228476243775
+            ],
+            [
+              77.65070683508955,
+              12.987850706860476
+            ],
+            [
+              77.64097880230976,
+              12.991918797126273
+            ],
+            [
+              77.63116676873479,
+              12.988049353959024
+            ],
+            [
+              77.62701913364894,
+              12.978509191430922
+            ],
+            [
+              77.63096511157279,
+              12.96888716768127
+            ],
+            [
+              77.64069256004825,
+              12.96481958723426
+            ],
+            [
+              77.65050368460285,
+              12.968688823534434
+            ],
+            [
+              77.65465190399306,
+              12.978228476243775
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "indiranagar",
+        "name": "Indiranagar",
+        "category": "Office/IT",
+        "submarket": "SBD",
+        "zone": "Central-East",
+        "key_landmarks": [
+          "100 Feet Road",
+          "CMH Road",
+          "Indiranagar Metro Station"
+        ],
+        "description": "Established office and startup corridor with strong retail/F&B presence.",
+        "radius_km": 1.5,
+        "centroid": [
+          77.640836,
+          12.978369
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.6471289,
+              12.959522
+            ],
+            [
+              77.6434285,
+              12.9605738
+            ],
+            [
+              77.638032,
+              12.9614002
+            ],
+            [
+              77.6340232,
+              12.961851
+            ],
+            [
+              77.6337149,
+              12.961851
+            ],
+            [
+              77.634977,
+              12.9578713
+            ],
+            [
+              77.6376466,
+              12.9532112
+            ],
+            [
+              77.6431201,
+              12.9502811
+            ],
+            [
+              77.6471289,
+              12.959522
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "old-airport-road-domlur",
+        "name": "Old Airport Road / Domlur",
+        "category": "Office/IT",
+        "submarket": "SBD",
+        "zone": "Central-East",
+        "key_landmarks": [
+          "Embassy Golf Links",
+          "Leela Galleria",
+          "IBM Campus"
+        ],
+        "description": "One of Bangalore's earliest IT corridors, now a mature SBD location.",
+        "radius_km": 1.5,
+        "centroid": [
+          77.633874,
+          12.961717
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.67491207194614,
+              12.97960127670394
+            ],
+            [
+              77.6696530359108,
+              12.992431129347517
+            ],
+            [
+              77.65668262554118,
+              12.99785609429692
+            ],
+            [
+              77.64359946528026,
+              12.992697657493883
+            ],
+            [
+              77.63806863770505,
+              12.979977821301327
+            ],
+            [
+              77.6433292915796,
+              12.967148334852215
+            ],
+            [
+              77.65629866480771,
+              12.9617242778646
+            ],
+            [
+              77.66938020722932,
+              12.966882348473082
+            ],
+            [
+              77.67491207194614,
+              12.97960127670394
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "mahadevapura-bagmane",
+        "name": "Mahadevapura / CV Raman Nagar (Bagmane cluster)",
+        "category": "Office/IT",
+        "submarket": "SBD/ORR",
+        "zone": "East",
+        "key_landmarks": [
+          "Bagmane Tech Park",
+          "Bagmane World Technology Center"
+        ],
+        "description": "Large IT campus cluster bridging the CBD and the Whitefield/ORR corridor.",
+        "radius_km": 2,
+        "centroid": [
+          77.656491,
+          12.97979
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.7194738,
+              12.9575987
+            ],
+            [
+              77.717580826059,
+              12.972721953594025
+            ],
+            [
+              77.6924203,
+              13.0014095
+            ],
+            [
+              77.6758767,
+              12.9993235
+            ],
+            [
+              77.6937827,
+              12.957409
+            ],
+            [
+              77.6877491,
+              12.9367337
+            ],
+            [
+              77.6994269,
+              12.931612
+            ],
+            [
+              77.7111047,
+              12.9418553
+            ],
+            [
+              77.7194738,
+              12.9575987
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "orr-marathahalli",
+        "name": "ORR - Marathahalli",
+        "category": "Office/IT",
+        "submarket": "ORR",
+        "zone": "East",
+        "key_landmarks": [
+          "Marathahalli Bridge"
+        ],
+        "description": "Western anchor of the eastern Outer Ring Road IT corridor.",
+        "radius_km": 2.5,
+        "centroid": [
+          77.701127,
+          12.956924
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.69372876742365,
+              12.923108098825521
+            ],
+            [
+              77.68715695818163,
+              12.939145424434843
+            ],
+            [
+              77.67094770134437,
+              12.945926898804956
+            ],
+            [
+              77.65459729833734,
+              12.939479022515185
+            ],
+            [
+              77.64768537687407,
+              12.923579276044219
+            ],
+            [
+              77.65425970613057,
+              12.907542515891256
+            ],
+            [
+              77.67046735435802,
+              12.900762457829618
+            ],
+            [
+              77.68681523735042,
+              12.907209768662803
+            ],
+            [
+              77.69372876742365,
+              12.923108098825521
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "orr-bellandur",
+        "name": "ORR - Bellandur / Kadubeesanahalli",
+        "category": "Office/IT",
+        "submarket": "ORR",
+        "zone": "East",
+        "key_landmarks": [
+          "RMZ Ecoworld",
+          "Prestige Tech Park",
+          "Cessna Business Park",
+          "Ecospace"
+        ],
+        "description": "Core of the ORR IT corridor with some of Bangalore's largest Grade A campuses.",
+        "radius_km": 2.5,
+        "centroid": [
+          77.670707,
+          12.923345
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.6629715821892,
+              12.911930985078683
+            ],
+            [
+              77.65771260639475,
+              12.924760498057688
+            ],
+            [
+              77.64474503203108,
+              12.930184263130041
+            ],
+            [
+              77.63166581809766,
+              12.925024472422102
+            ],
+            [
+              77.6261377290579,
+              12.912303919894503
+            ],
+            [
+              77.63139831363107,
+              12.899474770987117
+            ],
+            [
+              77.64436485672181,
+              12.894051909192356
+            ],
+            [
+              77.65744246187647,
+              12.899211335828575
+            ],
+            [
+              77.6629715821892,
+              12.911930985078683
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "hsr-layout",
+        "name": "HSR Layout",
+        "category": "Office/IT",
+        "submarket": "SBD/ORR",
+        "zone": "South-East",
+        "key_landmarks": [
+          "Agara Lake"
+        ],
+        "description": "Startup-dense residential-commercial area adjoining the ORR-Sarjapur junction.",
+        "radius_km": 2,
+        "centroid": [
+          77.644555,
+          12.912118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.71204062706049,
+              12.910625655428909
+            ],
+            [
+              77.6998325,
+              12.9156423
+            ],
+            [
+              77.6813568,
+              12.9214007
+            ],
+            [
+              77.6737302,
+              12.9221336
+            ],
+            [
+              77.666211,
+              12.9090462
+            ],
+            [
+              77.6672852,
+              12.895644
+            ],
+            [
+              77.6874795,
+              12.8958534
+            ],
+            [
+              77.7037438514991,
+              12.891548373962534
+            ],
+            [
+              77.71204062706049,
+              12.910625655428909
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "sarjapur-road",
+        "name": "Sarjapur Road",
+        "category": "Office/IT",
+        "submarket": "PBD East",
+        "zone": "South-East",
+        "key_landmarks": [
+          "RGA Tech Park",
+          "Wipro Sarjapur Campus"
+        ],
+        "description": "Rapidly developing IT corridor extending southeast from the ORR.",
+        "radius_km": 3,
+        "centroid": [
+          77.684417,
+          12.910911
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.7559266,
+              12.9827124
+            ],
+            [
+              77.7589055,
+              12.99208
+            ],
+            [
+              77.7381132,
+              12.9997548
+            ],
+            [
+              77.7179385,
+              13.0004144
+            ],
+            [
+              77.7166603,
+              12.9918161
+            ],
+            [
+              77.7162541,
+              12.9808653
+            ],
+            [
+              77.7322315,
+              12.9734765
+            ],
+            [
+              77.7524062,
+              12.9733445
+            ],
+            [
+              77.7559266,
+              12.9827124
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "whitefield-itpl",
+        "name": "Whitefield / ITPL",
+        "category": "Office/IT",
+        "submarket": "PBD East",
+        "zone": "East",
+        "key_landmarks": [
+          "International Tech Park Bangalore",
+          "Park Square Mall",
+          "Brookefield"
+        ],
+        "description": "Major peripheral IT hub anchored by ITPB, with extensive residential support.",
+        "radius_km": 3.5,
+        "centroid": [
+          77.735555,
+          12.985842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.6908817,
+              12.8343113
+            ],
+            [
+              77.6751830320843,
+              12.85823817298352
+            ],
+            [
+              77.65573696124943,
+              12.8663738445908
+            ],
+            [
+              77.6534066,
+              12.8513538
+            ],
+            [
+              77.639335,
+              12.8445465
+            ],
+            [
+              77.6377238,
+              12.8218193
+            ],
+            [
+              77.6624297,
+              12.8187819
+            ],
+            [
+              77.6781801,
+              12.8272811
+            ],
+            [
+              77.6908817,
+              12.8343113
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "electronic-city",
+        "name": "Electronic City Phase 1 & 2",
+        "category": "Office/IT",
+        "submarket": "PBD South",
+        "zone": "South",
+        "key_landmarks": [
+          "Infosys Campus",
+          "Wipro Campus",
+          "Electronics City Flyover"
+        ],
+        "description": "Major IT/electronics SEZ established in the 1980s-90s, now a mature office hub.",
+        "radius_km": 3,
+        "centroid": [
+          77.655452,
+          12.839275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.6414544,
+              13.0300933
+            ],
+            [
+              77.6412896,
+              13.0406953
+            ],
+            [
+              77.6208439,
+              13.0487267
+            ],
+            [
+              77.585229,
+              13.0527423
+            ],
+            [
+              77.5870427,
+              13.0382858
+            ],
+            [
+              77.6083128,
+              13.0378039
+            ],
+            [
+              77.6254607,
+              13.0260773
+            ],
+            [
+              77.64252456498696,
+              13.024888272088281
+            ],
+            [
+              77.6414544,
+              13.0300933
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "manyata-tech-park",
+        "name": "Manyata Tech Park (Nagawara/Hebbal)",
+        "category": "Office/IT",
+        "submarket": "PBD North",
+        "zone": "North",
+        "key_landmarks": [
+          "Manyata Tech Park",
+          "Hebbal Flyover"
+        ],
+        "description": "Major north Bangalore IT campus close to Hebbal and the airport road.",
+        "radius_km": 3.5,
+        "centroid": [
+          77.61996,
+          13.047476
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.7014705,
+              13.152189
+            ],
+            [
+              77.715913,
+              13.1864976
+            ],
+            [
+              77.6799098,
+              13.1936772
+            ],
+            [
+              77.6641661,
+              13.1680987
+            ],
+            [
+              77.6411761,
+              13.137264
+            ],
+            [
+              77.6677573,
+              13.1295463
+            ],
+            [
+              77.6810832,
+              13.1351519
+            ],
+            [
+              77.6968436,
+              13.1389536
+            ],
+            [
+              77.7014705,
+              13.152189
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "devanahalli-aerospace-park",
+        "name": "Devanahalli / Aerospace Park (Airport area)",
+        "category": "Office/IT",
+        "submarket": "PBD North",
+        "zone": "North",
+        "key_landmarks": [
+          "Kempegowda International Airport",
+          "KIADB Aerospace Park"
+        ],
+        "description": "Emerging office and aerospace/IT cluster near the international airport.",
+        "radius_km": 5,
+        "centroid": [
+          77.677178,
+          13.142223
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.5740003310369,
+              13.019838570704373
+            ],
+            [
+              77.56873525294701,
+              13.032667488547876
+            ],
+            [
+              77.55575972433431,
+              13.03808819573181
+            ],
+            [
+              77.5426753789658,
+              13.032924677904665
+            ],
+            [
+              77.53714798944398,
+              13.020201922718888
+            ],
+            [
+              77.54241467944406,
+              13.007373383646494
+            ],
+            [
+              77.55538915518488,
+              13.001953576553156
+            ],
+            [
+              77.56847188864315,
+              13.007116715609103
+            ],
+            [
+              77.5740003310369,
+              13.019838570704373
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "yeshwanthpur",
+        "name": "Yeshwanthpur",
+        "category": "Office/IT",
+        "submarket": "West Bangalore",
+        "zone": "North-West",
+        "key_landmarks": [
+          "Yeshwanthpur Railway Station"
+        ],
+        "description": "Emerging commercial node along the Tumkur Road belt.",
+        "radius_km": 2,
+        "centroid": [
+          77.555574,
+          13.020021
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.5714690547903,
+              12.997991350552796
+            ],
+            [
+              77.56620408014486,
+              13.010820174523896
+            ],
+            [
+              77.55322951943526,
+              13.016240561876634
+            ],
+            [
+              77.54014643799353,
+              13.011076686590116
+            ],
+            [
+              77.53461986605906,
+              12.998353745127543
+            ],
+            [
+              77.53988644982661,
+              12.985525299101708
+            ],
+            [
+              77.55285995971548,
+              12.980105810457014
+            ],
+            [
+              77.56594143203502,
+              12.985269307798182
+            ],
+            [
+              77.5714690547903,
+              12.997991350552796
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "rajajinagar-malleshwaram",
+        "name": "Rajajinagar / Malleshwaram",
+        "category": "Office/IT",
+        "submarket": "West/Central Bangalore",
+        "zone": "North-West",
+        "key_landmarks": [
+          "Mantri Square Mall"
+        ],
+        "description": "Legacy commercial areas, mostly back-office and BFSI occupiers.",
+        "radius_km": 2,
+        "centroid": [
+          77.553045,
+          12.998173
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.60409973225138,
+              12.906160413619487
+            ],
+            [
+              77.59883757114189,
+              12.918989299901293
+            ],
+            [
+              77.58586841401406,
+              12.924410324200812
+            ],
+            [
+              77.57279015130361,
+              12.919247288469986
+            ],
+            [
+              77.56726498543078,
+              12.906524891715012
+            ],
+            [
+              77.57252874849127,
+              12.893696375380214
+            ],
+            [
+              77.58549686830385,
+              12.888276248251863
+            ],
+            [
+              77.59857352906327,
+              12.893438914035585
+            ],
+            [
+              77.60409973225138,
+              12.906160413619487
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "jp-nagar",
+        "name": "JP Nagar",
+        "category": "Office/IT",
+        "submarket": "South Bangalore (emerging)",
+        "zone": "South",
+        "key_landmarks": [
+          "JP Nagar Metro corridor"
+        ],
+        "description": "Newer office and coworking growth area in South Bangalore.",
+        "radius_km": 2,
+        "centroid": [
+          77.585683,
+          12.906343
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.61727714851477,
+              12.892624374791914
+            ],
+            [
+              77.61201585968035,
+              12.905453355986385
+            ],
+            [
+              77.599047758379,
+              12.91087485354666
+            ],
+            [
+              77.58597011448214,
+              12.905712391771322
+            ],
+            [
+              77.58044476779017,
+              12.892990331998405
+            ],
+            [
+              77.5857076583955,
+              12.880161718696712
+            ],
+            [
+              77.59867472531604,
+              12.87474111890688
+            ],
+            [
+              77.61175076744193,
+              12.879903212789353
+            ],
+            [
+              77.61727714851477,
+              12.892624374791914
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bannerghatta-road",
+        "name": "Bannerghatta Road",
+        "category": "Office/IT",
+        "submarket": "South Bangalore (emerging)",
+        "zone": "South",
+        "key_landmarks": [
+          "IIM Bangalore",
+          "Royal Meenakshi Mall"
+        ],
+        "description": "Adjacent corridor to JP Nagar with growing commercial development.",
+        "radius_km": 2,
+        "centroid": [
+          77.598861,
+          12.892808
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.71481352860653,
+              12.815231294971516
+            ],
+            [
+              77.70824457292773,
+              12.831268443039518
+            ],
+            [
+              77.69204250915485,
+              12.838049792415045
+            ],
+            [
+              77.67569940978217,
+              12.831601920776393
+            ],
+            [
+              77.66879061284548,
+              12.81570229749954
+            ],
+            [
+              77.6753620725515,
+              12.799665703042255
+            ],
+            [
+              77.69156254939325,
+              12.792885764492647
+            ],
+            [
+              77.70790314473858,
+              12.79933308252036
+            ],
+            [
+              77.71481352860653,
+              12.815231294971516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "hosur-road-bommasandra-office",
+        "name": "Hosur Road / Bommasandra (office extension)",
+        "category": "Office/IT",
+        "submarket": "PBD South",
+        "zone": "South",
+        "key_landmarks": [
+          "Electronic City Phase 2 extension"
+        ],
+        "description": "Southward extension of the Electronic City office corridor along Hosur Road; geographically overlaps with the Bommasandra Industrial Area.",
+        "radius_km": 2.5,
+        "centroid": [
+          77.691802,
+          12.815468
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.5241845,
+              13.0327712
+            ],
+            [
+              77.5311766,
+              13.0397927
+            ],
+            [
+              77.5153637,
+              13.0496434
+            ],
+            [
+              77.502025,
+              13.0491194
+            ],
+            [
+              77.4983676,
+              13.0391639
+            ],
+            [
+              77.4992282,
+              13.0272168
+            ],
+            [
+              77.5107382,
+              13.0266928
+            ],
+            [
+              77.5181606,
+              13.0296272
+            ],
+            [
+              77.5241845,
+              13.0327712
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "peenya-industrial",
+        "name": "Peenya Industrial Area",
+        "category": "Industrial",
+        "submarket": "Industrial Cluster",
+        "zone": "North-West",
+        "key_landmarks": [
+          "Peenya Metro Station"
+        ],
+        "description": "One of Asia's largest industrial estates, dominated by light engineering, auto components, and electronics manufacturing.",
+        "radius_km": 3.5,
+        "centroid": [
+          77.519676,
+          13.028513
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.679381,
+              12.833922800180018
+            ],
+            [
+              77.69243540964372,
+              12.828650194980856
+            ],
+            [
+              77.69784272316691,
+              12.815921
+            ],
+            [
+              77.69243540964372,
+              12.803191805019143
+            ],
+            [
+              77.679381,
+              12.797919199819981
+            ],
+            [
+              77.66632659035629,
+              12.803191805019143
+            ],
+            [
+              77.6609192768331,
+              12.815921
+            ],
+            [
+              77.66632659035629,
+              12.828650194980856
+            ],
+            [
+              77.679381,
+              12.833922800180018
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bommasandra-industrial",
+        "name": "Bommasandra Industrial Area",
+        "category": "Industrial",
+        "submarket": "Industrial Cluster",
+        "zone": "South",
+        "key_landmarks": [
+          "Adjacent to Electronic City"
+        ],
+        "description": "Manufacturing and pharma cluster immediately south of Electronic City.",
+        "radius_km": 2.0,
+        "centroid": [
+          77.679381,
+          12.815921
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.664999,
+              12.816994800180018
+            ],
+            [
+              77.67805253287528,
+              12.811722194980856
+            ],
+            [
+              77.6834594832291,
+              12.798993
+            ],
+            [
+              77.67805253287528,
+              12.786263805019143
+            ],
+            [
+              77.664999,
+              12.780991199819981
+            ],
+            [
+              77.6519454671247,
+              12.786263805019143
+            ],
+            [
+              77.64653851677089,
+              12.798993
+            ],
+            [
+              77.6519454671247,
+              12.811722194980856
+            ],
+            [
+              77.664999,
+              12.816994800180018
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "jigani-industrial",
+        "name": "Jigani Industrial Area",
+        "category": "Industrial",
+        "submarket": "Industrial Cluster",
+        "zone": "South",
+        "key_landmarks": [
+          "Near Biocon campus"
+        ],
+        "description": "Manufacturing and pharmaceutical units further south along the Bommasandra-Jigani belt.",
+        "radius_km": 2.0,
+        "centroid": [
+          77.664999,
+          12.798993
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.44952259104228,
+              12.783712091066219
+            ],
+            [
+              77.43898362923892,
+              12.809365815711825
+            ],
+            [
+              77.41304513423204,
+              12.820190748336842
+            ],
+            [
+              77.38690448159552,
+              12.80984330977618
+            ],
+            [
+              77.37587895697875,
+              12.784385978322698
+            ],
+            [
+              77.38642419781874,
+              12.75873378139814
+            ],
+            [
+              77.41235851774732,
+              12.747912343775974
+            ],
+            [
+              77.43849289134639,
+              12.758258254614136
+            ],
+            [
+              77.44952259104228,
+              12.783712091066219
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bidadi-industrial",
+        "name": "Bidadi Industrial Area",
+        "category": "Industrial",
+        "submarket": "Industrial Cluster",
+        "zone": "South-West",
+        "key_landmarks": [
+          "Toyota Kirloskar Motor plant"
+        ],
+        "description": "Major automotive and heavy manufacturing zone on the Bangalore-Mysuru highway.",
+        "radius_km": 4,
+        "centroid": [
+          77.412701,
+          12.784052
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.830022,
+              13.132587250225022
+            ],
+            [
+              77.84635930838705,
+              13.12599649372607
+            ],
+            [
+              77.85312644309364,
+              13.110085
+            ],
+            [
+              77.84635930838705,
+              13.094173506273929
+            ],
+            [
+              77.830022,
+              13.087582749774977
+            ],
+            [
+              77.81368469161295,
+              13.094173506273929
+            ],
+            [
+              77.80691755690636,
+              13.110085
+            ],
+            [
+              77.81368469161295,
+              13.12599649372607
+            ],
+            [
+              77.830022,
+              13.132587250225022
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "hoskote-industrial",
+        "name": "Hoskote Industrial Area",
+        "category": "Industrial",
+        "submarket": "Industrial Cluster",
+        "zone": "East",
+        "key_landmarks": [
+          "Hoskote-Chintamani Road belt"
+        ],
+        "description": "Auto-component and light manufacturing cluster east of Whitefield.",
+        "radius_km": 2.5,
+        "centroid": [
+          77.830022,
+          13.110085
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.28289116606786,
+              13.225923699596775
+            ],
+            [
+              77.27364429205136,
+              13.248369453774052
+            ],
+            [
+              77.2509022382419,
+              13.257834450792666
+            ],
+            [
+              77.22798939735911,
+              13.248772310691635
+            ],
+            [
+              77.21833127745084,
+              13.226492429884232
+            ],
+            [
+              77.22758306250438,
+              13.204047965023669
+            ],
+            [
+              77.25032171823965,
+              13.194585664844576
+            ],
+            [
+              77.27322964808492,
+              13.203646515628009
+            ],
+            [
+              77.28289116606786,
+              13.225923699596775
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "dabaspet-industrial",
+        "name": "Dabaspet Industrial Area",
+        "category": "Industrial",
+        "submarket": "Industrial Cluster",
+        "zone": "North-West",
+        "key_landmarks": [
+          "KIADB Dabaspet Phase I/II"
+        ],
+        "description": "Heavy manufacturing zone (wind energy, machinery) on NH-48 toward Tumkur.",
+        "radius_km": 3.5,
+        "centroid": [
+          77.250612,
+          13.22621
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.58171968930658,
+              13.251491150988196
+            ],
+            [
+              77.57250166136316,
+              13.27394312845649
+            ],
+            [
+              77.54977376476404,
+              13.283433232351507
+            ],
+            [
+              77.52685203160986,
+              13.274400308488476
+            ],
+            [
+              77.51716725367925,
+              13.252136573809102
+            ],
+            [
+              77.52639029831666,
+              13.229685793764354
+            ],
+            [
+              77.54911489225039,
+              13.220198481393014
+            ],
+            [
+              77.57203160871008,
+              13.229230207831616
+            ],
+            [
+              77.58171968930658,
+              13.251491150988196
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "doddaballapur-industrial",
+        "name": "Doddaballapur Industrial Area",
+        "category": "Industrial",
+        "submarket": "Industrial Cluster",
+        "zone": "North",
+        "key_landmarks": [
+          "KIADB Doddaballapur textile & apparel parks"
+        ],
+        "description": "Textile, apparel, and light manufacturing cluster in North Bangalore.",
+        "radius_km": 3.5,
+        "centroid": [
+          77.549444,
+          13.251816
+        ]
+      }
+    }
+  ]
+}

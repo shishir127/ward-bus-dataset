@@ -1,123 +1,67 @@
 {
   "stations": [
     {
-      "station_name": "Madavara",
-      "lat": 13.0574214,
-      "lng": 77.4728055,
-      "bus_stop_count_500m": 0,
-      "route_count_500m": 138,
-      "feeder_gap": true
-    },
-    {
-      "station_name": "Chikkabidarakallu",
-      "lat": 13.0523616,
-      "lng": 77.4879154,
-      "bus_stop_count_500m": 0,
-      "route_count_500m": 133,
-      "feeder_gap": true
-    },
-    {
-      "station_name": "Delta Electronics Bommasandra",
-      "lat": 12.8193944,
-      "lng": 77.6883453,
-      "bus_stop_count_500m": 0,
-      "route_count_500m": 152,
-      "feeder_gap": true
-    },
-    {
-      "station_name": "Huskur Road",
-      "lat": 12.8391572,
-      "lng": 77.6773716,
-      "bus_stop_count_500m": 0,
-      "route_count_500m": 167,
-      "feeder_gap": true
-    },
-    {
-      "station_name": "Infosys Foundation Konappana Agrahara",
-      "lat": 12.8464134,
-      "lng": 77.6711655,
-      "bus_stop_count_500m": 0,
-      "route_count_500m": 221,
-      "feeder_gap": true
-    },
-    {
-      "station_name": "Electronic City",
-      "lat": 12.8565053,
-      "lng": 77.6635228,
-      "bus_stop_count_500m": 0,
-      "route_count_500m": 194,
-      "feeder_gap": true
-    },
-    {
-      "station_name": "Biocon Hebbagodi",
-      "lat": 12.8290325,
-      "lng": 77.6813744,
-      "bus_stop_count_500m": 0,
-      "route_count_500m": 140,
-      "feeder_gap": true
-    },
-    {
-      "station_name": "Challaghatta",
-      "lat": 12.8973539,
-      "lng": 77.4612877,
-      "bus_stop_count_500m": 1,
-      "route_count_500m": 184,
-      "feeder_gap": true
-    },
-    {
       "station_name": "Hoodi",
       "lat": 12.9888029,
       "lng": 77.711326,
-      "bus_stop_count_500m": 2,
+      "bus_stop_count_500m": 0,
       "route_count_500m": 96,
-      "feeder_gap": true
-    },
-    {
-      "station_name": "Benniganahalli",
-      "lat": 12.9965158,
-      "lng": 77.6684619,
-      "bus_stop_count_500m": 2,
-      "route_count_500m": 336,
       "feeder_gap": true
     },
     {
       "station_name": "Beratena Agrahara",
       "lat": 12.8638665,
       "lng": 77.6578624,
-      "bus_stop_count_500m": 2,
+      "bus_stop_count_500m": 0,
       "route_count_500m": 141,
       "feeder_gap": true
     },
     {
-      "station_name": "Dasarahalli",
-      "lat": 13.0432607,
-      "lng": 77.5125535,
+      "station_name": "Singasandra",
+      "lat": 12.8808178,
+      "lng": 77.6448456,
       "bus_stop_count_500m": 2,
-      "route_count_500m": 263,
+      "route_count_500m": 178,
       "feeder_gap": true
     },
     {
-      "station_name": "Peenya Industry",
-      "lat": 13.0363176,
-      "lng": 77.5254924,
+      "station_name": "Kudlu Gate",
+      "lat": 12.8899259,
+      "lng": 77.6392156,
       "bus_stop_count_500m": 2,
-      "route_count_500m": 222,
+      "route_count_500m": 190,
       "feeder_gap": true
     },
     {
-      "station_name": "Sri Sathya Sai Hospital",
-      "lat": 12.9811949,
-      "lng": 77.7275361,
+      "station_name": "Challaghatta",
+      "lat": 12.8973539,
+      "lng": 77.4612877,
+      "bus_stop_count_500m": 2,
+      "route_count_500m": 184,
+      "feeder_gap": true
+    },
+    {
+      "station_name": "Seetharampalya",
+      "lat": 12.9808558,
+      "lng": 77.7087854,
       "bus_stop_count_500m": 3,
-      "route_count_500m": 34,
+      "route_count_500m": 127,
       "feeder_gap": false
     },
     {
-      "station_name": "Garudacharpalya",
-      "lat": 12.9934505,
-      "lng": 77.7036768,
+      "station_name": "Hongasandra",
+      "lat": 12.9016952,
+      "lng": 77.6319861,
+      "bus_stop_count_500m": 3,
+      "route_count_500m": 186,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Madavara",
+      "lat": 13.0574214,
+      "lng": 77.4728055,
       "bus_stop_count_500m": 4,
-      "route_count_500m": 113,
+      "route_count_500m": 138,
       "feeder_gap": false
     },
     {
@@ -129,67 +73,115 @@
       "feeder_gap": false
     },
     {
-      "station_name": "Manjunathanagara",
-      "lat": 13.0500898,
-      "lng": 77.4944461,
-      "bus_stop_count_500m": 5,
-      "route_count_500m": 138,
+      "station_name": "Hosa Road",
+      "lat": 12.8707491,
+      "lng": 77.652447,
+      "bus_stop_count_500m": 4,
+      "route_count_500m": 192,
       "feeder_gap": false
     },
     {
-      "station_name": "Hopefarm Channasandra",
-      "lat": 12.9873426,
-      "lng": 77.7538033,
-      "bus_stop_count_500m": 5,
-      "route_count_500m": 198,
+      "station_name": "Bommanahalli",
+      "lat": 12.9106157,
+      "lng": 77.6264782,
+      "bus_stop_count_500m": 4,
+      "route_count_500m": 223,
       "feeder_gap": false
     },
     {
-      "station_name": "Nallurahalli",
-      "lat": 12.9766408,
-      "lng": 77.7248845,
-      "bus_stop_count_500m": 5,
-      "route_count_500m": 33,
+      "station_name": "Dasarahalli",
+      "lat": 13.0432607,
+      "lng": 77.5125535,
+      "bus_stop_count_500m": 4,
+      "route_count_500m": 263,
       "feeder_gap": false
     },
     {
-      "station_name": "Jnanabharathi",
-      "lat": 12.9354357,
-      "lng": 77.5124063,
-      "bus_stop_count_500m": 5,
-      "route_count_500m": 261,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Pantharapalya - Nayandahalli",
-      "lat": 12.9416715,
-      "lng": 77.5251166,
-      "bus_stop_count_500m": 5,
-      "route_count_500m": 252,
+      "station_name": "Peenya Industry",
+      "lat": 13.0363176,
+      "lng": 77.5254924,
+      "bus_stop_count_500m": 4,
+      "route_count_500m": 222,
       "feeder_gap": false
     },
     {
       "station_name": "Kengeri",
       "lat": 12.9079105,
       "lng": 77.4765784,
-      "bus_stop_count_500m": 5,
+      "bus_stop_count_500m": 4,
       "route_count_500m": 174,
       "feeder_gap": false
     },
     {
-      "station_name": "Yeshwantpur",
-      "lat": 13.0232678,
-      "lng": 77.5498751,
-      "bus_stop_count_500m": 5,
-      "route_count_500m": 241,
+      "station_name": "Kadugodi Tree Park",
+      "lat": 12.9856503,
+      "lng": 77.7470121,
+      "bus_stop_count_500m": 4,
+      "route_count_500m": 142,
       "feeder_gap": false
     },
     {
-      "station_name": "Pattandur Agrahara",
-      "lat": 12.9876393,
-      "lng": 77.7377718,
+      "station_name": "Kundalahalli",
+      "lat": 12.977594,
+      "lng": 77.7155586,
+      "bus_stop_count_500m": 5,
+      "route_count_500m": 29,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Peenya",
+      "lat": 13.0330189,
+      "lng": 77.533201,
+      "bus_stop_count_500m": 5,
+      "route_count_500m": 228,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Jaya Prakash Nagar",
+      "lat": 12.9074747,
+      "lng": 77.5731279,
+      "bus_stop_count_500m": 5,
+      "route_count_500m": 148,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Kengeri Bus Terminal",
+      "lat": 12.914689,
+      "lng": 77.4878557,
+      "bus_stop_count_500m": 5,
+      "route_count_500m": 285,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Biocon Hebbagodi",
+      "lat": 12.8290325,
+      "lng": 77.6813744,
+      "bus_stop_count_500m": 5,
+      "route_count_500m": 140,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Nagasandra",
+      "lat": 13.0479536,
+      "lng": 77.5001422,
+      "bus_stop_count_500m": 5,
+      "route_count_500m": 140,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Manjunathanagara",
+      "lat": 13.0500898,
+      "lng": 77.4944461,
       "bus_stop_count_500m": 6,
-      "route_count_500m": 145,
+      "route_count_500m": 138,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Garudacharpalya",
+      "lat": 12.9934505,
+      "lng": 77.7036768,
+      "bus_stop_count_500m": 6,
+      "route_count_500m": 113,
       "feeder_gap": false
     },
     {
@@ -201,91 +193,19 @@
       "feeder_gap": false
     },
     {
-      "station_name": "Singasandra",
-      "lat": 12.8808178,
-      "lng": 77.6448456,
+      "station_name": "Delta Electronics Bommasandra",
+      "lat": 12.8193944,
+      "lng": 77.6883453,
       "bus_stop_count_500m": 6,
-      "route_count_500m": 178,
+      "route_count_500m": 152,
       "feeder_gap": false
     },
     {
-      "station_name": "Kudlu Gate",
-      "lat": 12.8899259,
-      "lng": 77.6392156,
+      "station_name": "Jnanabharathi",
+      "lat": 12.9354357,
+      "lng": 77.5124063,
       "bus_stop_count_500m": 6,
-      "route_count_500m": 190,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Halasuru",
-      "lat": 12.9764992,
-      "lng": 77.626686,
-      "bus_stop_count_500m": 6,
-      "route_count_500m": 213,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Vijayanagar",
-      "lat": 12.9709559,
-      "lng": 77.5374044,
-      "bus_stop_count_500m": 6,
-      "route_count_500m": 132,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Peenya",
-      "lat": 13.0330189,
-      "lng": 77.533201,
-      "bus_stop_count_500m": 6,
-      "route_count_500m": 228,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Yelachenahalli",
-      "lat": 12.8960498,
-      "lng": 77.5701194,
-      "bus_stop_count_500m": 6,
-      "route_count_500m": 133,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Rajarajeshwari Nagar",
-      "lat": 12.9365996,
-      "lng": 77.5196788,
-      "bus_stop_count_500m": 6,
-      "route_count_500m": 259,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Pattanagere",
-      "lat": 12.9242505,
-      "lng": 77.4983509,
-      "bus_stop_count_500m": 6,
-      "route_count_500m": 189,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Vajarahalli",
-      "lat": 12.8774369,
-      "lng": 77.5447414,
-      "bus_stop_count_500m": 6,
-      "route_count_500m": 107,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Nagasandra",
-      "lat": 13.0479536,
-      "lng": 77.5001422,
-      "bus_stop_count_500m": 6,
-      "route_count_500m": 140,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Kadugodi Tree Park",
-      "lat": 12.9856503,
-      "lng": 77.7470121,
-      "bus_stop_count_500m": 6,
-      "route_count_500m": 142,
+      "route_count_500m": 261,
       "feeder_gap": false
     },
     {
@@ -297,19 +217,43 @@
       "feeder_gap": false
     },
     {
-      "station_name": "Kundalahalli",
-      "lat": 12.977594,
-      "lng": 77.7155586,
+      "station_name": "Pattandur Agrahara",
+      "lat": 12.9876393,
+      "lng": 77.7377718,
       "bus_stop_count_500m": 7,
-      "route_count_500m": 29,
+      "route_count_500m": 145,
       "feeder_gap": false
     },
     {
-      "station_name": "Hongasandra",
-      "lat": 12.9016952,
-      "lng": 77.6319861,
+      "station_name": "Sri Sathya Sai Hospital",
+      "lat": 12.9811949,
+      "lng": 77.7275361,
       "bus_stop_count_500m": 7,
-      "route_count_500m": 186,
+      "route_count_500m": 34,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Benniganahalli",
+      "lat": 12.9965158,
+      "lng": 77.6684619,
+      "bus_stop_count_500m": 7,
+      "route_count_500m": 336,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Huskur Road",
+      "lat": 12.8391572,
+      "lng": 77.6773716,
+      "bus_stop_count_500m": 7,
+      "route_count_500m": 167,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Swami Vivekananda Road",
+      "lat": 12.9859306,
+      "lng": 77.644897,
+      "bus_stop_count_500m": 7,
+      "route_count_500m": 223,
       "feeder_gap": false
     },
     {
@@ -321,43 +265,19 @@
       "feeder_gap": false
     },
     {
-      "station_name": "Deepanjali Nagar",
-      "lat": 12.9520578,
-      "lng": 77.5370122,
+      "station_name": "Yelachenahalli",
+      "lat": 12.8960498,
+      "lng": 77.5701194,
       "bus_stop_count_500m": 7,
-      "route_count_500m": 337,
+      "route_count_500m": 133,
       "feeder_gap": false
     },
     {
-      "station_name": "Seetharampalya",
-      "lat": 12.9808558,
-      "lng": 77.7087854,
-      "bus_stop_count_500m": 8,
-      "route_count_500m": 127,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Hosa Road",
-      "lat": 12.8707491,
-      "lng": 77.652447,
-      "bus_stop_count_500m": 8,
-      "route_count_500m": 192,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Ragigudda",
-      "lat": 12.9170807,
-      "lng": 77.5883015,
-      "bus_stop_count_500m": 8,
-      "route_count_500m": 96,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Indiranagar",
-      "lat": 12.9783325,
-      "lng": 77.6386612,
-      "bus_stop_count_500m": 8,
-      "route_count_500m": 69,
+      "station_name": "National College",
+      "lat": 12.9505266,
+      "lng": 77.5736898,
+      "bus_stop_count_500m": 7,
+      "route_count_500m": 161,
       "feeder_gap": false
     },
     {
@@ -366,22 +286,6 @@
       "lng": 77.5916385,
       "bus_stop_count_500m": 8,
       "route_count_500m": 284,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Nadaprabhu Kempegowda Station, Majestic",
-      "lat": 12.9757079,
-      "lng": 77.5728757,
-      "bus_stop_count_500m": 8,
-      "route_count_500m": 1112,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Mysore Road",
-      "lat": 12.9467183,
-      "lng": 77.5301588,
-      "bus_stop_count_500m": 8,
-      "route_count_500m": 304,
       "feeder_gap": false
     },
     {
@@ -401,10 +305,106 @@
       "feeder_gap": false
     },
     {
+      "station_name": "Pattanagere",
+      "lat": 12.9242505,
+      "lng": 77.4983509,
+      "bus_stop_count_500m": 8,
+      "route_count_500m": 189,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Chikkabidarakallu",
+      "lat": 13.0523616,
+      "lng": 77.4879154,
+      "bus_stop_count_500m": 9,
+      "route_count_500m": 133,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Nallurahalli",
+      "lat": 12.9766408,
+      "lng": 77.7248845,
+      "bus_stop_count_500m": 9,
+      "route_count_500m": 33,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Electronic City",
+      "lat": 12.8565053,
+      "lng": 77.6635228,
+      "bus_stop_count_500m": 9,
+      "route_count_500m": 194,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Halasuru",
+      "lat": 12.9764992,
+      "lng": 77.626686,
+      "bus_stop_count_500m": 9,
+      "route_count_500m": 213,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Pantharapalya - Nayandahalli",
+      "lat": 12.9416715,
+      "lng": 77.5251166,
+      "bus_stop_count_500m": 9,
+      "route_count_500m": 252,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Rajarajeshwari Nagar",
+      "lat": 12.9365996,
+      "lng": 77.5196788,
+      "bus_stop_count_500m": 9,
+      "route_count_500m": 259,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Vajarahalli",
+      "lat": 12.8774369,
+      "lng": 77.5447414,
+      "bus_stop_count_500m": 9,
+      "route_count_500m": 107,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Doddakallasandra",
+      "lat": 12.8846435,
+      "lng": 77.5527546,
+      "bus_stop_count_500m": 9,
+      "route_count_500m": 111,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Konanakunte Cross",
+      "lat": 12.8889671,
+      "lng": 77.5626665,
+      "bus_stop_count_500m": 9,
+      "route_count_500m": 154,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Jalahalli",
+      "lat": 13.0394104,
+      "lng": 77.5197351,
+      "bus_stop_count_500m": 10,
+      "route_count_500m": 371,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Baiyappanahalli",
+      "lat": 12.9907594,
+      "lng": 77.6523612,
+      "bus_stop_count_500m": 10,
+      "route_count_500m": 201,
+      "feeder_gap": false
+    },
+    {
       "station_name": "Silk Institute",
       "lat": 12.8617298,
       "lng": 77.5299545,
-      "bus_stop_count_500m": 8,
+      "bus_stop_count_500m": 10,
       "route_count_500m": 111,
       "feeder_gap": false
     },
@@ -412,248 +412,248 @@
       "station_name": "Thalaghattapura",
       "lat": 12.8714097,
       "lng": 77.5383958,
-      "bus_stop_count_500m": 8,
+      "bus_stop_count_500m": 10,
       "route_count_500m": 110,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Doddakallasandra",
-      "lat": 12.8846435,
-      "lng": 77.5527546,
-      "bus_stop_count_500m": 8,
-      "route_count_500m": 111,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Bommanahalli",
-      "lat": 12.9106157,
-      "lng": 77.6264782,
-      "bus_stop_count_500m": 9,
-      "route_count_500m": 223,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Central Silk Board",
-      "lat": 12.9165816,
-      "lng": 77.620567,
-      "bus_stop_count_500m": 9,
-      "route_count_500m": 300,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Baiyappanahalli",
-      "lat": 12.9907594,
-      "lng": 77.6523612,
-      "bus_stop_count_500m": 9,
-      "route_count_500m": 201,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Swami Vivekananda Road",
-      "lat": 12.9859306,
-      "lng": 77.644897,
-      "bus_stop_count_500m": 9,
-      "route_count_500m": 223,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Jayadeva Hospital",
-      "lat": 12.916731,
-      "lng": 77.5999663,
-      "bus_stop_count_500m": 10,
-      "route_count_500m": 190,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Magadi Road",
-      "lat": 12.975632,
-      "lng": 77.5553523,
-      "bus_stop_count_500m": 10,
-      "route_count_500m": 212,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Mahakavi Kuvempu Road",
-      "lat": 12.9985297,
-      "lng": 77.5568986,
-      "bus_stop_count_500m": 10,
-      "route_count_500m": 62,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Kengeri Bus Terminal",
-      "lat": 12.914689,
-      "lng": 77.4878557,
-      "bus_stop_count_500m": 10,
-      "route_count_500m": 285,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Mahatma Gandhi Road",
-      "lat": 12.9755264,
-      "lng": 77.6067902,
-      "bus_stop_count_500m": 11,
-      "route_count_500m": 387,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Sir M. Visvesvaraya Stn., Central College",
-      "lat": 12.9745197,
-      "lng": 77.58422,
-      "bus_stop_count_500m": 11,
-      "route_count_500m": 778,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "National College",
-      "lat": 12.9505266,
-      "lng": 77.5736898,
-      "bus_stop_count_500m": 11,
-      "route_count_500m": 161,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Jalahalli",
-      "lat": 13.0394104,
-      "lng": 77.5197351,
-      "bus_stop_count_500m": 12,
-      "route_count_500m": 371,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Sri Balagangadharanatha Swamiji Station, Hosahalli",
-      "lat": 12.9742933,
-      "lng": 77.5456215,
-      "bus_stop_count_500m": 12,
-      "route_count_500m": 267,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "South End Circle",
-      "lat": 12.9382573,
-      "lng": 77.5800556,
-      "bus_stop_count_500m": 12,
-      "route_count_500m": 186,
       "feeder_gap": false
     },
     {
       "station_name": "BTM Layout",
       "lat": 12.9165878,
       "lng": 77.6081182,
-      "bus_stop_count_500m": 13,
+      "bus_stop_count_500m": 11,
       "route_count_500m": 81,
       "feeder_gap": false
     },
     {
-      "station_name": "Srirampura",
-      "lat": 12.9965253,
-      "lng": 77.5631963,
-      "bus_stop_count_500m": 13,
-      "route_count_500m": 64,
+      "station_name": "Sri Balagangadharanatha Swamiji Station, Hosahalli",
+      "lat": 12.9742933,
+      "lng": 77.5456215,
+      "bus_stop_count_500m": 11,
+      "route_count_500m": 267,
       "feeder_gap": false
     },
     {
-      "station_name": "Rajajinagar",
-      "lat": 13.0005247,
-      "lng": 77.5496568,
-      "bus_stop_count_500m": 13,
-      "route_count_500m": 127,
+      "station_name": "Hopefarm Channasandra",
+      "lat": 12.9873426,
+      "lng": 77.7538033,
+      "bus_stop_count_500m": 12,
+      "route_count_500m": 198,
       "feeder_gap": false
     },
     {
-      "station_name": "Rashtreeya Vidyalaya Road",
-      "lat": 12.9215807,
-      "lng": 77.5802015,
-      "bus_stop_count_500m": 13,
-      "route_count_500m": 74,
+      "station_name": "Ragigudda",
+      "lat": 12.9170807,
+      "lng": 77.5883015,
+      "bus_stop_count_500m": 12,
+      "route_count_500m": 96,
       "feeder_gap": false
     },
     {
-      "station_name": "Cubbon Park",
-      "lat": 12.9809575,
-      "lng": 77.5975756,
+      "station_name": "Indiranagar",
+      "lat": 12.9783325,
+      "lng": 77.6386612,
+      "bus_stop_count_500m": 12,
+      "route_count_500m": 69,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Magadi Road",
+      "lat": 12.975632,
+      "lng": 77.5553523,
+      "bus_stop_count_500m": 12,
+      "route_count_500m": 212,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Deepanjali Nagar",
+      "lat": 12.9520578,
+      "lng": 77.5370122,
+      "bus_stop_count_500m": 12,
+      "route_count_500m": 337,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Infosys Foundation Konappana Agrahara",
+      "lat": 12.8464134,
+      "lng": 77.6711655,
+      "bus_stop_count_500m": 13,
+      "route_count_500m": 221,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Mysore Road",
+      "lat": 12.9467183,
+      "lng": 77.5301588,
+      "bus_stop_count_500m": 13,
+      "route_count_500m": 304,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "South End Circle",
+      "lat": 12.9382573,
+      "lng": 77.5800556,
       "bus_stop_count_500m": 14,
-      "route_count_500m": 497,
+      "route_count_500m": 186,
       "feeder_gap": false
     },
     {
-      "station_name": "Mahalakshmi",
-      "lat": 13.0080475,
-      "lng": 77.5488066,
-      "bus_stop_count_500m": 14,
-      "route_count_500m": 97,
+      "station_name": "Mahatma Gandhi Road",
+      "lat": 12.9755264,
+      "lng": 77.6067902,
+      "bus_stop_count_500m": 15,
+      "route_count_500m": 387,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Vijayanagar",
+      "lat": 12.9709559,
+      "lng": 77.5374044,
+      "bus_stop_count_500m": 15,
+      "route_count_500m": 132,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Yeshwantpur",
+      "lat": 13.0232678,
+      "lng": 77.5498751,
+      "bus_stop_count_500m": 15,
+      "route_count_500m": 241,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Jayadeva Hospital",
+      "lat": 12.916731,
+      "lng": 77.5999663,
+      "bus_stop_count_500m": 16,
+      "route_count_500m": 190,
       "feeder_gap": false
     },
     {
       "station_name": "Sandal Soap Factory",
       "lat": 13.0146544,
       "lng": 77.5539839,
-      "bus_stop_count_500m": 14,
+      "bus_stop_count_500m": 16,
       "route_count_500m": 321,
       "feeder_gap": false
     },
     {
-      "station_name": "Jaya Prakash Nagar",
-      "lat": 12.9074747,
-      "lng": 77.5731279,
-      "bus_stop_count_500m": 14,
-      "route_count_500m": 148,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Konanakunte Cross",
-      "lat": 12.8889671,
-      "lng": 77.5626665,
-      "bus_stop_count_500m": 14,
-      "route_count_500m": 154,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Krishna Rajendra Market",
-      "lat": 12.9608788,
-      "lng": 77.5746578,
-      "bus_stop_count_500m": 15,
-      "route_count_500m": 922,
+      "station_name": "Rashtreeya Vidyalaya Road",
+      "lat": 12.9215807,
+      "lng": 77.5802015,
+      "bus_stop_count_500m": 17,
+      "route_count_500m": 74,
       "feeder_gap": false
     },
     {
       "station_name": "Trinity",
       "lat": 12.9730218,
       "lng": 77.6170205,
-      "bus_stop_count_500m": 16,
+      "bus_stop_count_500m": 21,
       "route_count_500m": 239,
       "feeder_gap": false
     },
     {
-      "station_name": "Mantri Square Sampige Road",
-      "lat": 12.9904629,
-      "lng": 77.5707293,
-      "bus_stop_count_500m": 16,
-      "route_count_500m": 413,
+      "station_name": "Mahalakshmi",
+      "lat": 13.0080475,
+      "lng": 77.5488066,
+      "bus_stop_count_500m": 21,
+      "route_count_500m": 97,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Central Silk Board",
+      "lat": 12.9165816,
+      "lng": 77.620567,
+      "bus_stop_count_500m": 22,
+      "route_count_500m": 300,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Srirampura",
+      "lat": 12.9965253,
+      "lng": 77.5631963,
+      "bus_stop_count_500m": 22,
+      "route_count_500m": 64,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Sir M. Visvesvaraya Stn., Central College",
+      "lat": 12.9745197,
+      "lng": 77.58422,
+      "bus_stop_count_500m": 22,
+      "route_count_500m": 778,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Mahakavi Kuvempu Road",
+      "lat": 12.9985297,
+      "lng": 77.5568986,
+      "bus_stop_count_500m": 22,
+      "route_count_500m": 62,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Rajajinagar",
+      "lat": 13.0005247,
+      "lng": 77.5496568,
+      "bus_stop_count_500m": 22,
+      "route_count_500m": 127,
       "feeder_gap": false
     },
     {
       "station_name": "Banashankari",
       "lat": 12.9152208,
       "lng": 77.573598,
-      "bus_stop_count_500m": 17,
+      "bus_stop_count_500m": 22,
       "route_count_500m": 322,
-      "feeder_gap": false
-    },
-    {
-      "station_name": "Jayanagar",
-      "lat": 12.9295069,
-      "lng": 77.5801439,
-      "bus_stop_count_500m": 17,
-      "route_count_500m": 216,
       "feeder_gap": false
     },
     {
       "station_name": "Attiguppe",
       "lat": 12.9618931,
       "lng": 77.5335788,
-      "bus_stop_count_500m": 18,
+      "bus_stop_count_500m": 24,
       "route_count_500m": 135,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Jayanagar",
+      "lat": 12.9295069,
+      "lng": 77.5801439,
+      "bus_stop_count_500m": 24,
+      "route_count_500m": 216,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Cubbon Park",
+      "lat": 12.9809575,
+      "lng": 77.5975756,
+      "bus_stop_count_500m": 25,
+      "route_count_500m": 497,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Mantri Square Sampige Road",
+      "lat": 12.9904629,
+      "lng": 77.5707293,
+      "bus_stop_count_500m": 28,
+      "route_count_500m": 413,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Krishna Rajendra Market",
+      "lat": 12.9608788,
+      "lng": 77.5746578,
+      "bus_stop_count_500m": 28,
+      "route_count_500m": 922,
+      "feeder_gap": false
+    },
+    {
+      "station_name": "Nadaprabhu Kempegowda Station, Majestic",
+      "lat": 12.9757079,
+      "lng": 77.5728757,
+      "bus_stop_count_500m": 73,
+      "route_count_500m": 1112,
       "feeder_gap": false
     }
   ],

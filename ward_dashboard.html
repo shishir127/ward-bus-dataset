@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Bengaluru Ward Bus Coverage</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+
+  body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  #map { width: 100vw; height: calc(100vh - 44px); margin-top: 44px; }
+  .panel {
+    background: white;
+    padding: 14px 16px;
+    font-size: 14px;
+    border-radius: 8px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.18);
+    width: 260px;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+  .controls {
+    background: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.18);
+    width: 230px;
+  }
+  .controls input[type=text] {
+    width: 100%;
+    font-size: 14px;
+    padding: 6px 8px;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    outline: none;
+  }
+  .controls select {
+    width: 100%;
+    font-size: 14px;
+    padding: 5px 8px;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    box-sizing: border-box;
+    background: white;
+  }
+  .controls label.section { font-size: 12px; color: #6B7280; display: block; margin-bottom: 4px; }
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    color: #374151;
+    padding: 3px 0;
+    cursor: pointer;
+  }
+  .toggle-row input { cursor: pointer; margin: 0; }
+  .legend {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.18);
+    font-size: 12px;
+    line-height: 20px;
+    color: #374151;
+  }
+  .legend-title { font-size: 11px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .legend-item { display: flex; align-items: center; gap: 7px; }
+  .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 2px; flex-shrink: 0; }
+  .swatch-line { display: inline-block; width: 18px; height: 3px; border-radius: 2px; flex-shrink: 0; }
+  .route-btn {
+    width: 100%;
+    text-align: left;
+    font-size: 12px;
+    color: #6B7280;
+    background: none;
+    border: none;
+    padding: 4px 0;
+    cursor: pointer;
+  }
+  .route-btn:hover { color: #374151; }
+  .spinner {
+    display: inline-block; width: 16px; height: 16px;
+    border: 2px solid #E5E7EB; border-top-color: #374151;
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+    vertical-align: middle; margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .route-direction {
+    stroke-dasharray: 12, 8;
+    animation: routeFlow 0.65s linear infinite;
+  }
+  @keyframes routeFlow { to { stroke-dashoffset: -20; } }
+  .route-tooltip {
+    background: rgba(31,41,55,0.92) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    font-size: 12px !important;
+    padding: 4px 9px !important;
+    white-space: normal !important;
+    max-width: 220px !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25) !important;
+  }
+  .route-tooltip::before { display: none !important; }
+  .route-picker-popup .leaflet-popup-content-wrapper {
+    border-radius: 8px; padding: 0; overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  }
+  .route-picker-popup .leaflet-popup-content { margin: 10px 12px; }
+
+  /* Controls: buffer select + layers toggle in one compact row on mobile */
+  .controls-compact-row { display: flex; align-items: flex-end; gap: 8px; }
+  .controls-radius-group { flex: 1; min-width: 0; }
+  .layers-btn {
+    display: none;
+    align-items: center;
+    padding: 5px 10px;
+    font-size: 13px;
+    background: #F3F4F6;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    color: #374151;
+    flex-shrink: 0;
+    line-height: 1.4;
+  }
+  .layers-btn:hover { background: #E5E7EB; }
+  .layers-btn.active { background: #E0F2FE; border-color: #0891B2; color: #0C4A6E; }
+
+  /* Panel handle: always-visible bar with ward name + coverage % */
+  .panel-handle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .panel-handle-info { display: flex; align-items: baseline; gap: 8px; flex: 1; min-width: 0; }
+  .panel-ward-name { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .panel-coverage-pct { font-size: 18px; font-weight: 700; flex-shrink: 0; }
+  .panel-chevron { font-size: 11px; color: #9CA3AF; flex-shrink: 0; transition: transform 0.15s; display: none; }
+  .panel-chevron.open { transform: rotate(180deg); }
+
+  /* ---- Tab bar ---- */
+  .tab-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1100;
+    display: flex; align-items: center; background: white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15); height: 44px;
+    overflow-x: auto; overflow-y: hidden;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    height: 100%; min-width: 100px; border: none; background: none;
+    font-size: 14px; font-weight: 500; color: #6B7280; white-space: nowrap;
+    cursor: pointer; border-bottom: 3px solid transparent; padding: 0 20px;
+    flex-shrink: 0;
+  }
+  .tab-btn.active { color: #1F2937; border-bottom-color: #0891B2; }
+  .tab-btn:hover:not(.active) { color: #374151; background: #F9FAFB; }
+
+  /* ---- Report views (Rankings, Transit Hubs, Office Reach) ---- */
+  .report-view {
+    position: fixed; top: 44px; left: 0; right: 0; bottom: 0; z-index: 900;
+    display: none; overflow-y: auto;
+    background: #F9FAFB; padding: 16px 20px; box-sizing: border-box;
+  }
+  .report-view > .report-inner { max-width: 920px; margin: 0 auto; }
+  #officeView > .report-inner { max-width: none; }
+  #officeConnMap { height: calc(100vh - 44px - 170px); min-height: 500px; }
+  .report-title { margin: 0 0 8px; font-size: 20px; color: #1F2937; }
+  .report-lead { margin: 0 0 20px; font-size: 14px; color: #4B5563; line-height: 1.65; }
+  .report-section { margin: 28px 0 6px; font-size: 15px; font-weight: 600; color: #1F2937; }
+  .report-section-desc { margin: 0 0 10px; font-size: 13px; color: #6B7280; line-height: 1.5; }
+  #rankingsView {
+    position: fixed; top: 44px; left: 0; right: 0; bottom: 0; z-index: 900;
+    display: none; overflow-y: auto;
+    background: #F9FAFB; padding: 16px; box-sizing: border-box;
+  }
+  .rankings-table {
+    width: 100%; border-collapse: collapse; font-size: 13px; background: white;
+    border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .rankings-table th {
+    background: #F3F4F6; padding: 9px 12px; text-align: left;
+    border-bottom: 2px solid #E5E7EB; cursor: pointer; user-select: none;
+    white-space: nowrap; font-weight: 600; color: #374151; font-size: 12px;
+  }
+  .rankings-table th:hover { background: #E5E7EB; }
+  .rankings-table td { padding: 7px 12px; border-bottom: 1px solid #F3F4F6; color: #374151; }
+  .rankings-table tbody tr:hover td { background: #EFF6FF; cursor: pointer; }
+  .score-pill {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-weight: 600; font-size: 12px; color: white; min-width: 36px; text-align: center;
+  }
+
+  /* ---- Table/Heatmap view toggle ---- */
+  .view-toggle { display: inline-flex; border: 1px solid #D1D5DB; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
+  .view-toggle button {
+    border: none; background: white; color: #6B7280; font-size: 13px; font-weight: 500;
+    padding: 6px 14px; cursor: pointer;
+  }
+  .view-toggle button + button { border-left: 1px solid #D1D5DB; }
+  .view-toggle button.active { background: #0891B2; color: white; }
+  .view-toggle button:hover:not(.active) { background: #F3F4F6; }
+
+  /* ---- Choropleth heatmap views ---- */
+  .heatmap-container {
+    height: 600px; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .heat-legend-bar { width: 140px; height: 10px; border-radius: 4px; margin: 4px 0; }
+  .heat-legend-labels { display: flex; justify-content: space-between; font-size: 11px; color: #6B7280; }
+  .heat-legend-desc { margin-top: 6px; font-size: 11px; color: #6B7280; line-height: 1.4; max-width: 190px; }
+
+  @media (max-width: 640px) {
+    #rankingsView, .report-view { padding: 8px 6px; }
+    .col-secondary { display: none; }
+    .rankings-table { font-size: 13px; }
+    .rankings-table th, .rankings-table td { padding: 8px 8px; }
+    .rankings-table td:nth-child(2) { max-width: 160px; word-break: break-word; }
+    #rankSearch { max-width: 100%; }
+    .report-title { font-size: 16px; }
+    .report-lead { font-size: 13px; }
+    .heatmap-container { height: 400px; }
+  }
+
+  /* ---- Tablet (641-900px): slightly narrower controls ---- */
+  @media (max-width: 900px) {
+    .panel   { width: 220px; }
+    .controls { width: 195px; }
+  }
+
+  /* ---- Mobile (≤640px): full-width top bar + collapsible bottom sheet ---- */
+  @media (max-width: 640px) {
+    .leaflet-control-zoom { display: none !important; }
+
+    .leaflet-top.leaflet-right { left: 0 !important; right: 0 !important; }
+    .leaflet-top.leaflet-right .leaflet-control { float: none !important; margin: 6px 8px !important; }
+    .controls { width: auto !important; box-sizing: border-box; }
+    .layers-btn { display: flex !important; }
+    .controls-drawer { display: none; }
+    .controls-drawer.open { display: block; }
+
+    .leaflet-bottom.leaflet-right { left: 0 !important; right: 0 !important; }
+    .leaflet-bottom.leaflet-right .leaflet-control { float: none !important; margin: 0 !important; }
+    .panel {
+      width: auto !important;
+      max-height: none !important;
+      overflow-y: visible !important;
+      border-radius: 12px 12px 0 0 !important;
+      padding: 12px 16px !important;
+      font-size: 13px !important;
+    }
+    .panel-handle { cursor: pointer; }
+    .panel-chevron { display: inline !important; }
+    .panel-body { display: none; }
+    .panel-body.open { display: block; max-height: 45vh; overflow-y: auto; }
+
+    .leaflet-bottom.leaflet-left { display: none !important; }
+    .toggle-row { padding: 6px 0 !important; min-height: 36px; }
+  }
+
+</style>
+</head>
+<body>
+<div class="tab-bar">
+  <button class="tab-btn active" id="tabMap" onclick="switchTab('map')">Explore</button>
+  <button class="tab-btn" id="tabRankings" onclick="switchTab('rankings')">Rankings</button>
+  <button class="tab-btn" id="tabOffice" onclick="switchTab('office')">Office Reach</button>
+  <button class="tab-btn" id="tabHubs" onclick="switchTab('hubs')">Transit Hubs</button>
+</div>
+<div id="map"></div>
+<div id="rankingsView"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+  <h2 style="margin:0;font-size:18px;color:#1F2937">Ward connectivity rankings</h2>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div class="view-toggle" id="rankingsViewToggle">
+      <button data-view="table">Table</button>
+      <button class="active" data-view="heatmap">Heatmap</button>
+    </div>
+    <button id="dlCsvBtn" style="padding:7px 14px;background:#0891B2;color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500">Download CSV</button>
+  </div>
+</div>
+<p class="report-lead">Every ward is ranked by a <strong>composite connectivity score</strong> (0&ndash;100) that blends three measures, each converted to a percentile rank across all 367 wards: <strong>effective bus reach</strong> (50%) &mdash; a geometric mean of pedestrian coverage (% of ward within a 5-min / 400&nbsp;m walk of a bus stop) and office connectivity (% of major employment areas reachable by direct bus), so a ward only scores well if residents can <em>both</em> walk to a stop <em>and</em> those stops serve useful destinations; <strong>metro access</strong> (30%) &mdash; % of ward within a 400&nbsp;m walk of a Namma Metro station; and <strong>terminal access</strong> (20%) &mdash; % of ward within 800&nbsp;m of a major BMTC bus terminal. A score of 100 means best-served; the lowest-scoring wards have no walkable bus access to office areas and no metro or terminal nearby. Click any row to jump to that ward on the map.</p>
+<div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;padding:8px 14px;margin-bottom:14px;font-size:12px;color:#6B7280;line-height:1.7">
+  <span style="font-weight:600;color:#374151;font-family:monospace">score = 0.50&thinsp;&times;&thinsp;rank(bus reach) + 0.30&thinsp;&times;&thinsp;rank(metro) + 0.20&thinsp;&times;&thinsp;rank(terminal)</span>
+  &ensp;&middot;&ensp;bus reach = &radic;(PCA 400m&thinsp;%&thinsp;&times;&thinsp;office direct&thinsp;%)
+  &ensp;&middot;&ensp;rank(x) = percentile across all 367 wards
+</div>
+<div id="rankingsTableWrap" style="overflow-x:auto;display:none">
+<table class="rankings-table" id="rankingsTable">
+  <thead><tr>
+    <th data-col="rank"># &#8661;</th>
+    <th data-col="ward_name">Ward &#8661;</th>
+    <th data-col="composite_score" title="Composite connectivity score (0–100). Weighted blend: effective bus reach — geometric mean of pedestrian walkability (400 m PCA) and office direct connectivity (50%); metro access within 400 m walk (30%); bus terminal within 800 m (20%). The geometric mean means a ward needs BOTH walkable stops AND useful routes to score well on the bus component. Higher = better served.">Score &#8661; &#9432;</th>
+    <th data-col="stop_pca_400m_pct" title="% of the ward's area reachable within a 5-minute walk (400 m) of a bus stop, measured along actual streets using the OpenStreetMap walking network. Unlike simple circles, this accounts for dead ends, barriers, and street connectivity — giving a more accurate picture of real pedestrian access.">PCA 400m % &#8661; &#9432;</th>
+    <th data-col="stop_pca_800m_pct" class="col-secondary" title="% of the ward's area reachable within a 10-minute walk (800 m) of a bus stop, measured along actual streets. A broader measure of bus accessibility — includes residents willing to walk further to reach a stop.">PCA 800m % &#8661; &#9432;</th>
+    <th data-col="route_count" class="col-secondary" title="Total number of unique BMTC bus routes with at least one stop inside this ward.">Routes &#8661; &#9432;</th>
+    <th data-col="stop_count" class="col-secondary" title="Total number of bus stops located inside this ward's boundary.">Stops &#8661; &#9432;</th>
+    <th data-col="ward_area_km2" class="col-secondary" title="Total geographic area of the ward in km².">Area km&#178; &#8661;</th>
+    <th data-col="effective_bus_reach" class="col-secondary" title="Effective bus reach: geometric mean of pedestrian walkability (PCA 400 m) and office connectivity (% of major office areas reachable by direct bus). Both must be high to score well — walkable stops that go nowhere, or useful routes with stops too far to walk, each drag this down.">Eff. bus reach &#8661; &#9432;</th>
+    <th data-col="metro_access_pct" class="col-secondary" title="% of the ward's area within a 400 m walk of a Namma Metro station, measured along actual streets using the OSM walking network.">Metro access % &#8661; &#9432;</th>
+    <th data-col="terminal_access_pct" class="col-secondary" title="% of the ward's area within 800 m of a major BMTC bus terminal (e.g. Kempegowda Bus Station, Shivajinagar, Jayanagar).">Terminal access % &#8661; &#9432;</th>
+  </tr></thead>
+  <tbody id="rankingsTbody"></tbody>
+</table>
+</div>
+<div id="rankingsHeatmap" class="heatmap-container"></div></div>
+<div id="hubsView" class="report-view"><div class="report-inner">
+<h2 class="report-title">Transit Hub Connectivity</h2>
+<p class="report-lead">BMTC routes radiate outward from major bus terminals — wards with no direct terminal connection must always transfer buses to reach the wider network. This report identifies those <strong>transfer deserts</strong> and flags metro stations with poor onward bus access.</p>
+
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px">
+  <p class="report-section" style="margin:0">Transfer deserts — wards with 0 direct terminal connections</p>
+  <div class="view-toggle" id="desertViewToggle">
+    <button data-view="table">Table</button>
+    <button class="active" data-view="map">Map</button>
+  </div>
+</div>
+<p class="report-section-desc">These wards have no bus route that begins or ends at a major terminal. Residents must change buses for every inter-area journey.</p>
+<div id="desertTableWrap" style="overflow-x:auto;display:none">
+<table class="rankings-table" id="transferTbl">
+  <thead><tr>
+    <th>#</th><th>Ward</th>
+    <th title="Straight-line distance from the ward centroid to the nearest major BMTC bus terminal.">Nearest terminal (km) &#9432;</th>
+    <th title="Straight-line distance from the ward centroid to the nearest operational Namma Metro station.">Nearest metro (km) &#9432;</th>
+    <th title="Whether there is a direct BMTC bus route connecting this ward to its nearest metro station.">Metro bus &#9432;</th>
+    <th title="Number of major employment clusters directly connected to this ward by bus.">Offices connected &#9432;</th>
+  </tr></thead>
+  <tbody id="transferTbody"><tr><td colspan="6" style="padding:20px;text-align:center;color:#6B7280"><span class="spinner"></span> Loading…</td></tr></tbody>
+</table>
+</div>
+<div id="desertMap" class="heatmap-container"></div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;margin-top:24px">
+  <p class="report-section" style="margin:0">Metro stations with poor bus feeder access</p>
+  <div class="view-toggle" id="metroGapViewToggle">
+    <button data-view="table">Table</button>
+    <button class="active" data-view="map">Map</button>
+  </div>
+</div>
+<p class="report-section-desc">Stations with fewer than 3 OSM-mapped bus stops within 400 m walking distance. Bus stop counts use current OSM data (2026) rather than the 2013 GTFS — stations that appear here are likely genuine access gaps, not data artefacts.</p>
+<div id="metroGapTableWrap" style="overflow-x:auto;display:none">
+<table class="rankings-table" id="metroGapTbl">
+  <thead><tr>
+    <th>#</th>
+    <th>Metro station</th>
+    <th title="Number of OSM-mapped bus stops within 400 m walking distance of the metro station entrance. Fewer than 3 is flagged as a feeder gap.">Bus stops within 400 m &#9432;</th>
+  </tr></thead>
+  <tbody id="metroGapTbody"></tbody>
+</table>
+</div>
+<div id="metroGapMap" class="heatmap-container"></div>
+</div></div>
+<div id="officeView" class="report-view"><div class="report-inner">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
+  <div style="flex:1;min-width:0">
+    <h2 class="report-title">Office Area Bus Reach</h2>
+    <p class="report-lead">For each major employment cluster in Bengaluru, this report shows how many wards are connected by at least one direct bus route — meaning a bus that serves the ward <em>and</em> stops within the office cluster boundary. Clusters at the top are the hardest to reach by bus and are prime candidates for new or extended routes.</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <button id="dlOfficeCsvBtn" style="padding:7px 14px;background:#0891B2;color:white;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500">Download CSV</button>
+    <div class="view-toggle" id="officeViewToggle">
+      <button data-view="table">Table</button>
+      <button class="active" data-view="map">Map</button>
+    </div>
+  </div>
+</div>
+<div id="officeTableWrap" style="overflow-x:auto;display:none">
+<table class="rankings-table" id="officeTbl">
+  <thead><tr>
+    <th>#</th>
+    <th>Office / Employment cluster</th>
+    <th class="col-secondary" title="The type of employment cluster: Office/IT, Industrial, or CBD.">Category &#9432;</th>
+    <th title="Number of GTFS bus stops located within ~500 m of the office cluster boundary. Shows how well the cluster itself is served by local bus stops.">Stops in area &#9432;</th>
+    <th class="col-secondary" title="Number of unique BMTC bus routes with at least one stop inside the office cluster boundary.">Routes serving &#9432;</th>
+    <th title="Number of wards that have at least one bus route with a stop both inside the ward and inside the office cluster — i.e. you can board a direct bus from this ward to the office without any transfer.">Wards connected &#9432;</th>
+    <th title="Wards with a direct bus connection as a percentage of all 369 BBMP wards.">% of all wards &#9432;</th>
+    <th title="Median PCA-400m pedestrian catchment coverage across all wards directly connected to this office cluster. This is the % of each ward's area reachable within a 5-minute walk (400 m) of a bus stop, measured along actual streets. A low number means residents in many of those wards still have to walk far to reach their local stop — a last-mile problem inside the ward.">Avg. ward cov. &#9432;</th>
+    <th class="col-secondary" title="Total number of unique bus stop locations across the city whose routes can take you directly to this office cluster without any transfer.">Direct reach stops &#9432;</th>
+    <th class="col-secondary" title="Additional bus stops (not in direct reach) from which you can reach this office with exactly one bus-to-bus transfer.">1-transfer stops &#9432;</th>
+    <th class="col-secondary" title="Bus stops within 400 m of a metro station that connects — via shared route or walking — to this office cluster. Represents the bus-to-metro access path.">Metro feeder stops &#9432;</th>
+  </tr></thead>
+  <tbody id="officeTbody"><tr><td colspan="11" style="padding:20px;text-align:center;color:#6B7280"><span class="spinner"></span> Loading…</td></tr></tbody>
+</table>
+</div>
+<div id="officeConnMap" class="heatmap-container"></div>
+</div></div>
+<script>
+const DATA_BASE_URL = "https://raw.githubusercontent.com/shishir127/ward-bus-dataset/main/data";
+
+const map = L.map("map").setView([12.97, 77.59], 11);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+  attribution: "CartoDB"
+}).addTo(map);
+
+
+// ---------------- LAYER STYLES ----------------
+// Render order: residential (bottom) → catchment → routes → ward border (top)
+
+var residentialLayer = L.geoJSON(null, {
+    style: {weight:0, fillColor:"#FDE68A", fillOpacity:0.65}
+}).addTo(map);
+
+var coverageLayer = L.geoJSON(null, {
+    style: {color:"#0891B2", weight:1.5, opacity:0.9, fillColor:"#BAE6FD", fillOpacity:0.35}
+}).addTo(map);
+
+var metroPcaLayer = L.layerGroup().addTo(map);
+
+var routeLayer = L.geoJSON(null, {
+    style: {color:"#991B1B", weight:1.5, opacity:0.8},
+    onEachFeature: function(feature, layer) {
+        var rid = feature.properties.kgisbmtcrootid
+            ? "#" + Math.round(feature.properties.kgisbmtcrootid) + "  "
+            : "";
+        var dname = (feature.properties.route_name || "").replace(/ To /g, " → ");
+        var trips = feature.properties.trip_count != null
+            ? "  •  " + feature.properties.trip_count + " trips/day"
+            : "";
+        layer.bindTooltip(rid + dname + trips, {
+            sticky: true, className: "route-tooltip", direction: "top"
+        });
+    }
+}).addTo(map);
+
+var wardLoadingHighlight = L.geoJSON(null, {
+    style: {color:"#0891B2", weight:2, dashArray:"6 4", fillColor:"#0EA5E9", fillOpacity:0.1}
+}).addTo(map);
+
+var wardHighlight = L.geoJSON(null, {
+    style: {color:"#1F2937", weight:3, fill:false}
+}).addTo(map);
+
+var highlightedRouteLayer = L.geoJSON(null, {
+    style: {color:"#FCD34D", weight:5, opacity:1, className:"route-direction"}
+}).addTo(map);
+
+var stopLayer = L.geoJSON(null, {
+    pointToLayer: function(feature, latlng) {
+        return L.circleMarker(latlng, {
+            radius: 4, color: "#0369A1", weight: 1.5,
+            fillColor: "#38BDF8", fillOpacity: 0.85
+        });
+    },
+    onEachFeature: function(feature, layer) {
+        var p = feature.properties;
+        var tip = p.stop_name || "Bus stop";
+        if (p.route_count != null) tip += "  •  " + p.route_count + " routes";
+        if (p.trip_count  != null) tip += "  •  " + p.trip_count  + " trips/day";
+        layer.bindTooltip(tip, {sticky: true, className: "route-tooltip", direction: "top"});
+    }
+}).addTo(map);
+
+// ---------------- LEGEND ----------------
+
+var legend = L.control({position:"bottomleft"});
+legend.onAdd = function(){
+    var div = L.DomUtil.create("div","legend");
+    div.innerHTML =
+        "<div class='legend-title'>Legend</div>" +
+        "<div class='legend-item'><span class='swatch-line' style='background:#991B1B'></span>Bus routes</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#BAE6FD;border:1.5px solid #0891B2'></span>Catchment area</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#FDE68A'></span>Residential areas</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#38BDF8;border:1.5px solid #0369A1;border-radius:50%;width:10px;height:10px'></span>Bus stops</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#A78BFA;border:2.5px solid #6D28D9;border-radius:50%;width:10px;height:10px'></span>Metro stations</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#3B82F6;border:2.5px solid #1E3A8A;border-radius:50%;width:10px;height:10px'></span>Bus terminals</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:none;border:2.5px solid #1F2937'></span>Selected ward</div>";
+    return div;
+};
+legend.addTo(map);
+
+
+// --- Metro station markers ---
+var _metroData = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.4728055, 13.0574214]}, "properties": {"name": "Madavara"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.4879154, 13.0523616]}, "properties": {"name": "Chikkabidarakallu"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.4944461, 13.0500898]}, "properties": {"name": "Manjunathanagara"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5999663, 12.916731]}, "properties": {"name": "Jayadeva Hospital"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7579489, 12.9957428]}, "properties": {"name": "Whitefield (Kadugodi)"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7538033, 12.9873426]}, "properties": {"name": "Hopefarm Channasandra"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7377718, 12.9876393]}, "properties": {"name": "Pattandur Agrahara"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7275361, 12.9811949]}, "properties": {"name": "Sri Sathya Sai Hospital"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7248845, 12.9766408]}, "properties": {"name": "Nallurahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7155586, 12.977594]}, "properties": {"name": "Kundalahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7087854, 12.9808558]}, "properties": {"name": "Seetharampalya"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.711326, 12.9888029]}, "properties": {"name": "Hoodi"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7036768, 12.9934505]}, "properties": {"name": "Garudacharpalya"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6927176, 12.9965445]}, "properties": {"name": "Singayyanapalya"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6776703, 12.9999024]}, "properties": {"name": "Krishnarajapura"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6684619, 12.9965158]}, "properties": {"name": "Benniganahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6883453, 12.8193944]}, "properties": {"name": "Delta Electronics Bommasandra"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6773716, 12.8391572]}, "properties": {"name": "Huskur Road"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6711655, 12.8464134]}, "properties": {"name": "Infosys Foundation Konappana Agrahara"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6635228, 12.8565053]}, "properties": {"name": "Electronic City"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6578624, 12.8638665]}, "properties": {"name": "Beratena Agrahara"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.652447, 12.8707491]}, "properties": {"name": "Hosa Road"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6448456, 12.8808178]}, "properties": {"name": "Singasandra"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6392156, 12.8899259]}, "properties": {"name": "Kudlu Gate"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6319861, 12.9016952]}, "properties": {"name": "Hongasandra"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6264782, 12.9106157]}, "properties": {"name": "Bommanahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.620567, 12.9165816]}, "properties": {"name": "Central Silk Board"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6081182, 12.9165878]}, "properties": {"name": "BTM Layout"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5883015, 12.9170807]}, "properties": {"name": "Ragigudda"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5125535, 13.0432607]}, "properties": {"name": "Dasarahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5197351, 13.0394104]}, "properties": {"name": "Jalahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5631963, 12.9965253]}, "properties": {"name": "Srirampura"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6523612, 12.9907594]}, "properties": {"name": "Baiyappanahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.644897, 12.9859306]}, "properties": {"name": "Swami Vivekananda Road"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6386612, 12.9783325]}, "properties": {"name": "Indiranagar"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.626686, 12.9764992]}, "properties": {"name": "Halasuru"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6170205, 12.9730218]}, "properties": {"name": "Trinity"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6067902, 12.9755264]}, "properties": {"name": "Mahatma Gandhi Road"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5975756, 12.9809575]}, "properties": {"name": "Cubbon Park"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5916385, 12.9787419]}, "properties": {"name": "Dr. B. R. Ambedkar Station, Vidhana Soudha"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.58422, 12.9745197]}, "properties": {"name": "Sir M. Visvesvaraya Stn., Central College"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5728757, 12.9757079]}, "properties": {"name": "Nadaprabhu Kempegowda Station, Majestic"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5653767, 12.9758768]}, "properties": {"name": "Krantivira Sangolli Rayanna Railway Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5553523, 12.975632]}, "properties": {"name": "Magadi Road"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5456215, 12.9742933]}, "properties": {"name": "Sri Balagangadharanatha Swamiji Station, Hosahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5374044, 12.9709559]}, "properties": {"name": "Vijayanagar"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5335788, 12.9618931]}, "properties": {"name": "Attiguppe"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5370122, 12.9520578]}, "properties": {"name": "Deepanjali Nagar"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5301588, 12.9467183]}, "properties": {"name": "Mysore Road"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5707293, 12.9904629]}, "properties": {"name": "Mantri Square Sampige Road"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5568986, 12.9985297]}, "properties": {"name": "Mahakavi Kuvempu Road"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5496568, 13.0005247]}, "properties": {"name": "Rajajinagar"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5488066, 13.0080475]}, "properties": {"name": "Mahalakshmi"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5539839, 13.0146544]}, "properties": {"name": "Sandal Soap Factory"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.533201, 13.0330189]}, "properties": {"name": "Peenya"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5254924, 13.0363176]}, "properties": {"name": "Peenya Industry"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5701194, 12.8960498]}, "properties": {"name": "Yelachenahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5731279, 12.9074747]}, "properties": {"name": "Jaya Prakash Nagar"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.573598, 12.9152208]}, "properties": {"name": "Banashankari"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5802015, 12.9215807]}, "properties": {"name": "Rashtreeya Vidyalaya Road"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5801439, 12.9295069]}, "properties": {"name": "Jayanagar"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5800556, 12.9382573]}, "properties": {"name": "South End Circle"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.580016, 12.9465265]}, "properties": {"name": "Lalbagh"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5736898, 12.9505266]}, "properties": {"name": "National College"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5746578, 12.9608788]}, "properties": {"name": "Krishna Rajendra Market"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5745566, 12.9668974]}, "properties": {"name": "Chickpete"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5124063, 12.9354357]}, "properties": {"name": "Jnanabharathi"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5251166, 12.9416715]}, "properties": {"name": "Pantharapalya - Nayandahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.4878557, 12.914689]}, "properties": {"name": "Kengeri Bus Terminal"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.4765784, 12.9079105]}, "properties": {"name": "Kengeri"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5196788, 12.9365996]}, "properties": {"name": "Rajarajeshwari Nagar"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.4983509, 12.9242505]}, "properties": {"name": "Pattanagere"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.4612877, 12.8973539]}, "properties": {"name": "Challaghatta"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5299545, 12.8617298]}, "properties": {"name": "Silk Institute"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5383958, 12.8714097]}, "properties": {"name": "Thalaghattapura"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5447414, 12.8774369]}, "properties": {"name": "Vajarahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5527546, 12.8846435]}, "properties": {"name": "Doddakallasandra"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5626665, 12.8889671]}, "properties": {"name": "Konanakunte Cross"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6813744, 12.8290325]}, "properties": {"name": "Biocon Hebbagodi"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5001422, 13.0479536]}, "properties": {"name": "Nagasandra"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5498751, 13.0232678]}, "properties": {"name": "Yeshwantpur"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7470121, 12.9856503]}, "properties": {"name": "Kadugodi Tree Park"}}]};
+var showMetro = true;
+var metroLayer = L.geoJSON(_metroData, {
+    pointToLayer: function(feature, latlng) {
+        return L.circleMarker(latlng, {
+            radius: 7, color: "#6D28D9", weight: 2.5,
+            fillColor: "#A78BFA", fillOpacity: 0.9
+        });
+    },
+    onEachFeature: function(feature, layer) {
+        layer.bindTooltip("Metro: " + feature.properties.name, {
+            sticky: true, className: "route-tooltip", direction: "top"
+        });
+    }
+}).addTo(map);
+
+// --- Bus terminal markers ---
+var _terminalData = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6387296, 12.9618019]}, "properties": {"name": "Domlur Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.577792, 12.9640735]}, "properties": {"name": "KR Market Bus Terminus"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.625052, 12.940967]}, "properties": {"name": "Koramangala TTMC"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7585103, 12.9957008]}, "properties": {"name": "Kadugodi Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6580829, 12.9657586]}, "properties": {"name": "Jeevan Bhima Nagar Bus Depot"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.534673, 12.9654668]}, "properties": {"name": "Vijayanagar Bus Stand"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.572995, 12.9177649]}, "properties": {"name": "Banashankari TTMC"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6030764, 12.9832087]}, "properties": {"name": "Shivajinagar Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6571821, 12.8359802]}, "properties": {"name": "Shikaripalya"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.8273994, 12.7351576]}, "properties": {"name": "Hosur Main Bus Stand"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.572425, 12.9781534]}, "properties": {"name": "Kempegowda Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6162448, 12.9156888]}, "properties": {"name": "Kuvempunagara Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.558449, 12.8994801]}, "properties": {"name": "ISRO Layout Bus Stand"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5540115, 13.0328303]}, "properties": {"name": "Choudeshwari Bus Stand"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5688359, 13.0088483]}, "properties": {"name": "Malleswaram 18th Cross"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6963688, 12.709008]}, "properties": {"name": "Anekal Bus Stand"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5664043, 13.0363195]}, "properties": {"name": "Chikkamaranahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5256683, 13.0449062]}, "properties": {"name": "Basaveshwara Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.4794228, 13.1376313]}, "properties": {"name": "Hesaghatta Bus Terminal"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.3846401, 12.797119]}, "properties": {"name": "Bidadi Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5776755, 12.8006961]}, "properties": {"name": "Bannerghatta BMTC Bus Stand"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5565251, 13.0181038]}, "properties": {"name": "Yeshwanthapura TTMC"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5608039, 13.0835244]}, "properties": {"name": "Vidyaranyapura Bus Terminus"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6141529, 12.9576398]}, "properties": {"name": "Neelasandra"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5725276, 13.1057293]}, "properties": {"name": "Yelahanka Satellite Town"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5396549, 12.9341348]}, "properties": {"name": "Shri Vidhyanagara BMTC Bus station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5947807, 13.1009552]}, "properties": {"name": "Yelahanka Old Town"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.4870405, 12.9137066]}, "properties": {"name": "Kengeri TTMC"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5268919, 12.9591632]}, "properties": {"name": "Chandra Layout Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5914873, 13.0977]}, "properties": {"name": "NES Office"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5663481, 13.0362217]}, "properties": {"name": "Chikkamaranahalli"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5432875, 12.9052725]}, "properties": {"name": "Uttarahalli Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.569026, 12.9380703]}, "properties": {"name": "N. R. Colony Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5076931, 13.059074]}, "properties": {"name": "Mallasandra Bus Station"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5843406, 12.9282487]}, "properties": {"name": "Jayanagar TTMC"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.4825373, 12.9162491]}, "properties": {"name": "Kengeri Uppanagara Bus Stand"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.6230925, 12.9181312]}, "properties": {"name": "Silk Board TTMC"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.7265033, 12.9771653]}, "properties": {"name": "Vydehi TTMC"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [77.5435706, 12.9534085]}, "properties": {"name": "Mysore Road Bus Station"}}]};
+var showTerminals = true;
+var terminalLayer = L.geoJSON(_terminalData, {
+    pointToLayer: function(feature, latlng) {
+        return L.circleMarker(latlng, {
+            radius: 7, color: "#1E3A8A", weight: 2.5,
+            fillColor: "#3B82F6", fillOpacity: 0.9
+        });
+    },
+    onEachFeature: function(feature, layer) {
+        layer.bindTooltip("Terminal: " + feature.properties.name, {
+            sticky: true, className: "route-tooltip", direction: "top"
+        });
+    }
+}).addTo(map);
+
+
+// --- State ---
+let currentWard = null;
+let showResidential = true;
+let showCatchment = true;
+let showRoutes = true;
+let wardCache = {};
+let summary = null;
+let wardsGeojson = null;
+let routesGeojson = null;
+let currentWardRoutes = [];
+let currentWardRouteFeatures = [];
+let currentWardIdByName = {};
+let _pendingWardClick = null;
+let showStops = true;
+let wardScores = [];
+let wardScoresLoaded = false;
+let metroStationsData = null, metroStationsLoaded = false;
+let wardDirectOfficesData = null, wardDirectOfficesLoaded = false;
+let rankSortCol = "composite_score";
+let rankSortAsc = false;
+let rankFilter = "";
+let hubScoresData = null;
+let metroGapsData = null;
+let hubsLoaded = false;
+let desertViewMode = "map";
+let desertLeafMap = null;
+let metroGapViewMode = "map";
+let metroGapLeafMap = null;
+let officeData = null;
+let officeAreasGeojson = null;
+let officeHopsData = null;
+let officeCatchmentData = null;
+let officeCatchmentLayer = null;
+let officeMapView = "catchment";
+let officePcaRadius = 400;  // 400 or 800
+let explorePcaRadius = 400;  // 400 or 800, for Explore tab catchment
+let wardCoverage = {};
+let officeLoaded = false;
+let rankingsViewMode = "heatmap";
+let rankMetric = "composite_score";
+let officeViewMode = "map";
+let rankingsHeatMap = null;
+let rankingsHeatLayer = null;
+let officeConnMap = null;
+let officeWardLayer = null;
+let officeAreaLayer = null;
+let officeSelectedId = null;
+
+// --- Info panel ---
+const infoControl = L.control({position:"bottomright"});
+infoControl.onAdd = () => {
+  const div = L.DomUtil.create("div","panel");
+  div.innerHTML = "Loading...";
+  return div;
+};
+infoControl.addTo(map);
+L.DomEvent.disableScrollPropagation(infoControl.getContainer());
+const infoEl = () => infoControl.getContainer();
+
+// --- Controls ---
+const ctrlControl = L.control({position:"topright"});
+ctrlControl.onAdd = () => {
+  const div = L.DomUtil.create("div","controls");
+  div.innerHTML = `
+<div style="position:relative;margin-bottom:10px">
+  <input type="text" id="wardSearch" placeholder="Search ward…" autocomplete="off" style="width:100%;margin-bottom:0">
+  <div id="wardDropdown" style="display:none;position:absolute;top:100%;left:0;right:0;background:white;border:1px solid #D1D5DB;border-top:none;border-radius:0 0 6px 6px;max-height:200px;overflow-y:auto;z-index:9999;box-shadow:0 4px 6px rgba(0,0,0,0.1)"></div>
+</div>
+<div class="controls-compact-row">
+  <div class="controls-radius-group">
+    <label class="section">Walk distance (PCA)</label>
+    <div style="display:flex;gap:4px;margin-top:2px">
+      <button id="pca400Btn" onclick="setPcaRadius(400)" style="padding:3px 10px;border-radius:4px;border:1px solid #D1D5DB;font-size:12px;cursor:pointer;font-weight:500;background:#0891B2;color:#fff">400 m</button>
+      <button id="pca800Btn" onclick="setPcaRadius(800)" style="padding:3px 10px;border-radius:4px;border:1px solid #D1D5DB;font-size:12px;cursor:pointer;font-weight:500;background:#fff;color:#374151">800 m</button>
+    </div>
+  </div>
+  <button class="layers-btn" id="layersBtn" type="button">&#9881; Layers</button>
+</div>
+<div class="controls-drawer" id="controlsDrawer">
+  <div style="border-top:1px solid #F3F4F6;margin-top:10px;padding-top:8px">
+    <label class="section">Layers</label>
+    <label class="toggle-row"><input type="checkbox" id="routesToggle" checked> Bus routes</label>
+    <label class="toggle-row"><input type="checkbox" id="catchmentToggle" checked> Catchment area (PCA)</label>
+    <label class="toggle-row"><input type="checkbox" id="residentialToggle" checked> Residential areas</label>
+    <label class="toggle-row"><input type="checkbox" id="stopsToggle" checked> Bus stops</label>
+    <label class="toggle-row"><input type="checkbox" id="metroToggle" checked> Metro stations</label>
+    <label class="toggle-row"><input type="checkbox" id="terminalToggle" checked> Bus terminals</label>
+  </div>
+</div>`;
+  const layersBtn = div.querySelector("#layersBtn");
+  const controlsDrawer = div.querySelector("#controlsDrawer");
+  if (layersBtn && controlsDrawer) {
+    layersBtn.onclick = () => {
+      controlsDrawer.classList.toggle("open");
+      layersBtn.classList.toggle("active");
+    };
+  }
+  return div;
+};
+ctrlControl.addTo(map);
+L.DomEvent.disableScrollPropagation(ctrlControl.getContainer());
+
+// --- Helpers ---
+function slugify(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+}
+
+function setPcaRadius(r) {
+  explorePcaRadius = r;
+  document.getElementById("pca400Btn").style.cssText =
+    `padding:3px 10px;border-radius:4px;border:1px solid #D1D5DB;font-size:12px;cursor:pointer;font-weight:500;background:${r===400?"#0891B2":"#fff"};color:${r===400?"#fff":"#374151"}`;
+  document.getElementById("pca800Btn").style.cssText =
+    `padding:3px 10px;border-radius:4px;border:1px solid #D1D5DB;font-size:12px;cursor:pointer;font-weight:500;background:${r===800?"#0891B2":"#fff"};color:${r===800?"#fff":"#374151"}`;
+  if (currentWard && wardCache[slugify(currentWard)]) showWard(currentWard);
+}
+
+async function fetchJSON(url) {
+  const resp = await fetch(url, {cache: "no-cache"});
+  if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${url}`);
+  return resp.json();
+}
+
+// Wires a "Table | Heatmap" segmented control: shows/hides the table and
+// heatmap containers, and lazily renders/resizes the heatmap on first view.
+function wireViewToggle(toggleId, tableWrapId, heatmapId, setMode, renderHeatmap, getHeatMap, ensureDataLoaded) {
+  document.querySelectorAll(`#${toggleId} button`).forEach(btn => {
+    btn.onclick = () => {
+      const view = btn.dataset.view;
+      const isTable = view === "table";
+      setMode(view);
+      document.querySelectorAll(`#${toggleId} button`).forEach(b => b.classList.toggle("active", b === btn));
+      document.getElementById(tableWrapId).style.display = isTable ? "" : "none";
+      document.getElementById(heatmapId).style.display = isTable ? "none" : "";
+      if (!isTable) {
+        renderHeatmap();
+        ensureDataLoaded();
+        setTimeout(() => { const m = getHeatMap(); if (m) m.invalidateSize(); }, 50);
+      }
+    };
+  });
+}
+
+// --- Panel rendering ---
+function buildPanel(wardName, wardData) {
+  const wardArea = summary.ward_areas[wardName] || 0;
+  const pcaGeom = wardData.coverage_geom_pca && wardData.coverage_geom_pca[String(explorePcaRadius)];
+  // PCA coverage % from ward_scores (pre-computed)
+  const scoreRow = wardScores.find(s => s.ward_name === wardName);
+  const pcaKey = explorePcaRadius === 400 ? "stop_pca_400m_pct" : "stop_pca_800m_pct";
+  const covPct = scoreRow && scoreRow[pcaKey] != null ? scoreRow[pcaKey] : null;
+  const covStr = covPct != null ? covPct.toFixed(1) : "—";
+  const netKm = summary.unique_network_km[wardName] != null ? summary.unique_network_km[wardName].toFixed(2) : "—";
+  const routeCount = wardData.connectivity.length;
+  const barColor = covPct == null ? "#9CA3AF" : covPct >= 70 ? "#16A34A" : covPct >= 40 ? "#D97706" : "#DC2626";
+  const hasResidential = wardData.residential_geom ? "Yes" : "No data";
+  const stopCount = wardData.stops_geojson ? wardData.stops_geojson.features.length : 0;
+  const walkLabel = explorePcaRadius === 400 ? "5-min walk (400 m)" : "10-min walk (800 m)";
+
+  // Nearby metro stations (same bounding-box filter used to render PCA polygons)
+  const nearbyMetro = (metroStationsData && wardHighlight.getBounds().isValid())
+    ? (metroStationsData || []).filter(st => wardHighlight.getBounds().pad(0.005).contains([st.lat, st.lng]))
+    : [];
+
+  // Directly reachable office areas by bus
+  const directOffices = (wardDirectOfficesData && wardDirectOfficesData[wardName]) || [];
+
+  return `
+<div class="panel-handle" id="panelHandle">
+  <div class="panel-handle-info">
+    <span class="panel-ward-name">${wardName}</span>
+    <span class="panel-coverage-pct" style="color:${barColor}">${covStr}%</span>
+  </div>
+  <span class="panel-chevron" id="panelChevron">&#9660;</span>
+</div>
+<div class="panel-body" id="panelBody">
+<div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">PCA coverage (${walkLabel})</div>
+<div style="font-size:24px;font-weight:700;color:${barColor};line-height:1.1">${covStr}%</div>
+<div style="background:#E5E7EB;border-radius:4px;height:7px;margin:6px 0 14px">
+  ${covPct != null ? `<div style="background:${barColor};border-radius:4px;height:7px;width:${Math.min(covPct,100).toFixed(1)}%"></div>` : ''}
+</div>
+<div style="color:#374151;border-top:1px solid #F3F4F6">
+  <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F9FAFB"><span style="color:#6B7280">Ward area</span><b>${wardArea.toFixed(2)} km²</b></div>
+  <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F9FAFB"><span style="color:#6B7280">Network length</span><b>${netKm} km</b></div>
+  <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F9FAFB"><span style="color:#6B7280">Routes serving ward</span><b>${routeCount}</b></div>
+  <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:#6B7280">Bus stops</span><b>${stopCount}</b></div>
+</div>
+
+${nearbyMetro.length > 0 ? `
+<div style="margin-top:10px;padding-top:8px;border-top:1px solid #F3F4F6">
+  <div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px">Metro within 400 m walk</div>
+  <div>${nearbyMetro.map(st => `<span style="display:inline-block;background:#EDE9FE;color:#5B21B6;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;margin:2px 3px 2px 0">${st.name}</span>`).join("")}</div>
+</div>` : ""}
+
+${directOffices.length > 0 ? `
+<div style="margin-top:8px;padding-top:8px;border-top:1px solid #F3F4F6">
+  <div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px">Direct bus to offices (${directOffices.length}/25)</div>
+  <div>${directOffices.slice(0,6).map(o => `<span style="display:inline-block;background:#DCFCE7;color:#166534;font-size:11px;font-weight:500;padding:2px 8px;border-radius:12px;margin:2px 3px 2px 0">${o}</span>`).join("")}${directOffices.length > 6 ? `<span style="font-size:11px;color:#6B7280;margin-left:2px">+${directOffices.length - 6} more</span>` : ""}</div>
+</div>` : `
+<div style="margin-top:8px;padding-top:8px;border-top:1px solid #F3F4F6">
+  <div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">Direct bus to offices</div>
+  <div style="font-size:12px;color:#9CA3AF">None</div>
+</div>`}
+
+<button id="routeToggleBtn" class="route-btn">&#9662; Show routes (${routeCount})</button>
+<div id="rl" style="display:none;max-height:160px;overflow-y:auto;margin-top:2px">
+  ${wardData.connectivity.map((r,i)=>{const rid=currentWardIdByName[r]?'<span style="font-size:10px;color:#9CA3AF;margin-right:4px">#'+currentWardIdByName[r]+'</span>':'';const dn=r.replace(/ To /g,' → ');return '<div class="route-item" data-idx="'+i+'" style="padding:4px 6px;border-bottom:1px solid #F9FAFB;font-size:12px;color:#374151;cursor:pointer;border-radius:3px">'+rid+dn+'</div>';}).join("")}
+</div>
+</div>`;
+}
+
+// --- Render ward from cached data ---
+function renderWard(wardName, wardData) {
+  currentWardRoutes = wardData.connectivity;
+  currentWardRouteFeatures = routesGeojson.features.filter(f =>
+      wardData.connectivity.includes(f.properties.route_name)
+  );
+  currentWardIdByName = {};
+  currentWardRouteFeatures.forEach(f => {
+    const n = f.properties.route_name;
+    if (!currentWardIdByName[n] && f.properties.kgisbmtcrootid)
+      currentWardIdByName[n] = Math.round(f.properties.kgisbmtcrootid);
+  });
+  wardLoadingHighlight.clearLayers();
+  residentialLayer.clearLayers();
+  coverageLayer.clearLayers();
+  metroPcaLayer.clearLayers();
+  routeLayer.clearLayers();
+  wardHighlight.clearLayers();
+  highlightedRouteLayer.clearLayers();
+  stopLayer.clearLayers();
+
+  if (showResidential && wardData.residential_geom) residentialLayer.addData(wardData.residential_geom);
+
+  if (showCatchment) {
+    const pcaGeom = wardData.coverage_geom_pca && wardData.coverage_geom_pca[String(explorePcaRadius)];
+    if (pcaGeom) {
+      coverageLayer.addData({type:"Feature", geometry:pcaGeom, properties:{}});
+    } else {
+      // Fallback to circle buffer if PCA not available
+      const buffer = "500";
+      const geom = wardData.coverage_geom_stops && wardData.coverage_geom_stops[buffer];
+      if (geom) coverageLayer.addData({type:"Feature", geometry:geom, properties:{}});
+    }
+  }
+
+  if (showRoutes) routeLayer.addData({type:"FeatureCollection", features:currentWardRouteFeatures});
+
+  if (showStops && wardData.stops_geojson) stopLayer.addData(wardData.stops_geojson);
+
+  wardsGeojson.features.forEach(f => {
+    if (f.properties.ward_name === wardName) wardHighlight.addData(f);
+  });
+  if (wardHighlight.getBounds().isValid()) map.fitBounds(wardHighlight.getBounds(), {padding:[50,50]});
+
+  // Metro station PCAs (400 m walk) for stations whose point falls within the ward bounds
+  if (metroStationsData && wardHighlight.getBounds().isValid()) {
+    const bounds = wardHighlight.getBounds().pad(0.005);
+    (metroStationsData || []).forEach(st => {
+      if (!bounds.contains([st.lat, st.lng])) return;
+      if (!st.pca_400 || st.pca_400.length < 3) return;
+      L.polygon(st.pca_400.map(([lng, lat]) => [lat, lng]), {
+        color: "#7C3AED", weight: 1.5, fillColor: "#7C3AED", fillOpacity: 0.20
+      }).bindTooltip(st.name + " (Metro — 400 m walk)", {sticky: true}).addTo(metroPcaLayer);
+    });
+  }
+
+  infoEl().innerHTML = buildPanel(wardName, wardData);
+
+  // panel handle: tap to expand/collapse body on mobile
+  const panelHandle = document.getElementById("panelHandle");
+  if (panelHandle) {
+    panelHandle.onclick = () => {
+      document.getElementById("panelBody")?.classList.toggle("open");
+      document.getElementById("panelChevron")?.classList.toggle("open");
+    };
+  }
+
+  // route list toggle
+  const btn = document.getElementById("routeToggleBtn");
+  const rl  = document.getElementById("rl");
+  if (btn && rl) {
+    btn.onclick = () => {
+      const hidden = rl.style.display === "none";
+      rl.style.display = hidden ? "block" : "none";
+      btn.textContent = hidden ? "▴ Hide routes" : `▾ Show routes (${wardData.connectivity.length})`;
+    };
+  }
+
+  // route item clicks → highlight on map
+  infoEl().querySelectorAll(".route-item").forEach(item => {
+    item.onmouseenter = () => { if (!item.classList.contains("selected-route")) item.style.background = "#F9FAFB"; };
+    item.onmouseleave = () => { if (!item.classList.contains("selected-route")) item.style.background = ""; };
+    item.onclick = () => selectRouteByName(currentWardRoutes[parseInt(item.dataset.idx)]);
+  });
+}
+
+async function showWard(wardName) {
+  currentWard = wardName;
+  const si = document.getElementById("wardSearch");
+  if (si) { si.value = wardName; const dd = document.getElementById("wardDropdown"); if (dd) dd.style.display = "none"; }
+  const slug = slugify(wardName);
+
+  infoEl().innerHTML = `<span class="spinner"></span> Loading ${wardName}…`;
+
+  // Immediate spatial feedback: highlight the ward on the map while data loads
+  wardLoadingHighlight.clearLayers();
+  if (wardsGeojson) {
+    const feat = wardsGeojson.features.find(f => f.properties.ward_name === wardName);
+    if (feat) wardLoadingHighlight.addData(feat);
+  }
+
+  try {
+    const fetches = [];
+    if (!routesGeojson) fetches.push(fetchJSON(`${DATA_BASE_URL}/routes.geojson`).then(d => { routesGeojson = d; }));
+    if (!wardCache[slug]) fetches.push(fetchJSON(`${DATA_BASE_URL}/wards/${slug}.json`).then(d => { wardCache[slug] = d; }));
+    if (!metroStationsLoaded) fetches.push(
+      fetchJSON(`${DATA_BASE_URL}/metro_stations_simple.json`)
+        .then(d => { metroStationsData = d; metroStationsLoaded = true; })
+        .catch(() => { metroStationsData = []; metroStationsLoaded = true; })
+    );
+    if (!wardDirectOfficesLoaded) fetches.push(
+      fetchJSON(`${DATA_BASE_URL}/ward_direct_offices.json`)
+        .then(d => { wardDirectOfficesData = d; wardDirectOfficesLoaded = true; })
+        .catch(() => { wardDirectOfficesData = {}; wardDirectOfficesLoaded = true; })
+    );
+    if (fetches.length) await Promise.all(fetches);
+  } catch(e) {
+    if (wardName !== currentWard) return;
+    wardLoadingHighlight.clearLayers();
+    infoEl().innerHTML = `<span style="color:#DC2626">Error loading data:<br>${e.message}</span>`;
+    return;
+  }
+
+  if (wardName !== currentWard) return;
+  renderWard(wardName, wardCache[slug]);
+}
+
+// --- Route interaction ---
+function selectRouteByName(routeName) {
+  highlightedRouteLayer.clearLayers();
+  currentWardRouteFeatures.forEach(f => {
+    if (f.properties.route_name === routeName) highlightedRouteLayer.addData(f);
+  });
+  const rl = document.getElementById("rl");
+  const btn = document.getElementById("routeToggleBtn");
+  if (rl && rl.style.display === "none") {
+    rl.style.display = "block";
+    if (btn) btn.textContent = "▴ Hide routes";
+  }
+  infoEl().querySelectorAll(".route-item").forEach(item => {
+    const idx = parseInt(item.dataset.idx);
+    const isMatch = currentWardRoutes[idx] === routeName;
+    item.style.background = isMatch ? "#FEF3C7" : "";
+    item.style.color = isMatch ? "#92400E" : "#374151";
+    item.style.fontWeight = isMatch ? "600" : "";
+    if (isMatch) { item.classList.add("selected-route"); item.scrollIntoView({block:"nearest"}); }
+    else item.classList.remove("selected-route");
+  });
+}
+
+function showRoutePickerPopup(latlng, routeNames) {
+  const popup = L.popup({className:"route-picker-popup"}).setLatLng(latlng);
+  const div = document.createElement("div");
+  div.style.cssText = "max-height:200px;overflow-y:auto;";
+  const title = document.createElement("div");
+  title.textContent = "Select route:";
+  title.style.cssText = "font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;font-weight:600";
+  div.appendChild(title);
+  routeNames.forEach(r => {
+    const item = document.createElement("div");
+    item.textContent = r.replace(/ To /g, " → ");
+    item.style.cssText = "padding:5px 0;font-size:13px;color:#374151;cursor:pointer;border-bottom:1px solid #F9FAFB";
+    item.onmouseenter = () => { item.style.color = "#1F2937"; item.style.fontWeight = "600"; };
+    item.onmouseleave = () => { item.style.color = "#374151"; item.style.fontWeight = ""; };
+    item.onclick = () => { popup.remove(); selectRouteByName(r); };
+    div.appendChild(item);
+  });
+  popup.setContent(div).openOn(map);
+}
+
+map.on("click", e => {
+  const clickPt = map.latLngToLayerPoint(e.latlng);
+  const THRESHOLD = 8;
+  const nearbyRoutes = [];
+  currentWardRouteFeatures.forEach(feature => {
+    const type = feature.geometry.type;
+    if (type !== "LineString" && type !== "MultiLineString") return;
+    const lines = type === "LineString" ? [feature.geometry.coordinates] : feature.geometry.coordinates;
+    let hit = false;
+    for (const line of lines) {
+      if (hit) break;
+      for (let i = 0; i < line.length - 1; i++) {
+        const p1 = map.latLngToLayerPoint(L.latLng(line[i][1], line[i][0]));
+        const p2 = map.latLngToLayerPoint(L.latLng(line[i+1][1], line[i+1][0]));
+        if (L.LineUtil.pointToSegmentDistance(clickPt, p1, p2) <= THRESHOLD) { hit = true; break; }
+      }
+    }
+    if (hit && !nearbyRoutes.includes(feature.properties.route_name))
+      nearbyRoutes.push(feature.properties.route_name);
+  });
+  if (nearbyRoutes.length === 0) {
+    if (_pendingWardClick) showWard(_pendingWardClick);
+    _pendingWardClick = null;
+    return;
+  }
+  _pendingWardClick = null;
+  nearbyRoutes.length === 1 ? selectRouteByName(nearbyRoutes[0]) : showRoutePickerPopup(e.latlng, nearbyRoutes);
+});
+
+// --- Wire up controls ---
+map.on("layeradd", () => {
+  const els = {
+    wardSearch: document.getElementById("wardSearch"),
+    routesToggle: document.getElementById("routesToggle"),
+    catchmentToggle: document.getElementById("catchmentToggle"),
+    residentialToggle: document.getElementById("residentialToggle"),
+    stopsToggle: document.getElementById("stopsToggle"),
+    metroToggle: document.getElementById("metroToggle"),
+    terminalToggle: document.getElementById("terminalToggle"),
+  };
+  // wardSearch is wired in init() after summary loads
+  if (els.routesToggle && !els.routesToggle._wired) {
+    els.routesToggle._wired = true;
+    els.routesToggle.onchange = function() {
+      showRoutes = this.checked;
+      routeLayer.clearLayers();
+      if (showRoutes && currentWard && routesGeojson)
+        routeLayer.addData({type:"FeatureCollection", features:currentWardRouteFeatures});
+    };
+  }
+  if (els.catchmentToggle && !els.catchmentToggle._wired) {
+    els.catchmentToggle._wired = true;
+    els.catchmentToggle.onchange = function() {
+      showCatchment = this.checked;
+      coverageLayer.clearLayers();
+      if (showCatchment && currentWard && wardCache[slugify(currentWard)]) {
+        const wd = wardCache[slugify(currentWard)];
+        const pcaGeom = wd.coverage_geom_pca && wd.coverage_geom_pca[String(explorePcaRadius)];
+        if (pcaGeom) coverageLayer.addData({type:"Feature", geometry:pcaGeom, properties:{}});
+      }
+    };
+  }
+  if (els.residentialToggle && !els.residentialToggle._wired) {
+    els.residentialToggle._wired = true;
+    els.residentialToggle.onchange = function() {
+      showResidential = this.checked;
+      residentialLayer.clearLayers();
+      if (showResidential && currentWard && wardCache[slugify(currentWard)]?.residential_geom)
+        residentialLayer.addData(wardCache[slugify(currentWard)].residential_geom);
+    };
+  }
+  if (els.stopsToggle && !els.stopsToggle._wired) {
+    els.stopsToggle._wired = true;
+    els.stopsToggle.onchange = function() {
+      showStops = this.checked;
+      stopLayer.clearLayers();
+      if (showStops && currentWard && wardCache[slugify(currentWard)]?.stops_geojson)
+        stopLayer.addData(wardCache[slugify(currentWard)].stops_geojson);
+    };
+  }
+  if (els.metroToggle && !els.metroToggle._wired) {
+    els.metroToggle._wired = true;
+    els.metroToggle.onchange = function() {
+      showMetro = this.checked;
+      if (showMetro) metroLayer.addTo(map); else map.removeLayer(metroLayer);
+      if (showMetro) metroPcaLayer.addTo(map); else map.removeLayer(metroPcaLayer);
+    };
+  }
+  if (els.terminalToggle && !els.terminalToggle._wired) {
+    els.terminalToggle._wired = true;
+    els.terminalToggle.onchange = function() {
+      showTerminals = this.checked;
+      if (showTerminals) terminalLayer.addTo(map); else map.removeLayer(terminalLayer);
+    };
+  }
+});
+
+// --- Tab switching ---
+function switchTab(tab) {
+  document.getElementById("map").style.display = tab === "map" ? "" : "none";
+  document.getElementById("rankingsView").style.display = tab === "rankings" ? "block" : "none";
+  document.getElementById("hubsView").style.display = tab === "hubs" ? "block" : "none";
+  document.getElementById("officeView").style.display = tab === "office" ? "block" : "none";
+  ["map","rankings","hubs","office"].forEach(t => {
+    const el = document.getElementById("tab" + t.charAt(0).toUpperCase() + t.slice(1));
+    if (el) el.classList.toggle("active", t === tab);
+  });
+  if (tab === "map") setTimeout(() => map.invalidateSize(), 50);
+  if (tab === "rankings") {
+    loadRankingsIfNeeded();
+    if (rankingsHeatMap) setTimeout(() => rankingsHeatMap.invalidateSize(), 60);
+  }
+  if (tab === "hubs") {
+    loadHubsIfNeeded();
+    if (desertLeafMap) setTimeout(() => desertLeafMap.invalidateSize(), 60);
+    if (metroGapLeafMap) setTimeout(() => metroGapLeafMap.invalidateSize(), 60);
+  }
+  if (tab === "office") {
+    loadOfficeIfNeeded();
+    if (officeConnMap && officeConnMap.invalidateSize) setTimeout(() => officeConnMap.invalidateSize(), 60);
+  }
+}
+
+async function loadRankingsIfNeeded() {
+  if (wardScoresLoaded) {
+    renderRankingsTable();
+    if (rankingsViewMode === "heatmap") { renderRankingsHeatmap(); updateRankingsHeatLayer(); }
+    return;
+  }
+  document.getElementById("rankingsTbody").innerHTML =
+    "<tr><td colspan='18' style='padding:20px;text-align:center;color:#6B7280'><span class='spinner'></span> Loading rankings…</td></tr>";
+  try {
+    const [scores, hubScores] = await Promise.all([
+      fetchJSON(`${DATA_BASE_URL}/ward_scores.json`),
+      fetchJSON(`${DATA_BASE_URL}/transit_hub_scores.json`).catch(() => []),
+    ]);
+    const hubByWard = {};
+    hubScores.forEach(h => { hubByWard[h.ward_name] = h; });
+    wardScores = scores.map(s => {
+      const h = hubByWard[s.ward_name] || {};
+      return Object.assign({}, s, {
+        terminal_count:      h.terminal_count      != null ? h.terminal_count      : null,
+        nearest_terminal_km: h.nearest_terminal_km != null ? h.nearest_terminal_km : null,
+        nearest_metro:       h.nearest_metro       || null,
+        nearest_metro_km:    h.nearest_metro_km    != null ? h.nearest_metro_km    : null,
+        has_metro_bus:       h.has_metro_bus       != null ? h.has_metro_bus       : null,
+        metro_feeder_gap:    h.metro_feeder_gap    != null ? h.metro_feeder_gap    : null,
+        office_area_count:   h.office_area_count   != null ? h.office_area_count   : null,
+        nearest_office_km:   h.nearest_office_km   != null ? h.nearest_office_km   : null,
+      });
+    });
+    wardScoresLoaded = true;
+    renderRankingsTable();
+    if (rankingsViewMode === "heatmap") { renderRankingsHeatmap(); updateRankingsHeatLayer(); }
+  } catch(e) {
+    document.getElementById("rankingsTbody").innerHTML =
+      `<tr><td colspan='18' style='padding:20px;text-align:center;color:#DC2626'>Error loading rankings: ${e.message}</td></tr>`;
+  }
+}
+
+function scoreColor(s) {
+  return s >= 70 ? "#16A34A" : s >= 40 ? "#D97706" : "#DC2626";
+}
+
+// Continuous red -> amber -> green interpolation for choropleth heatmaps
+function scoreToHeatColor(value, max) {
+  var t = Math.max(0, Math.min(1, (value || 0) / max));
+  var stops = [[220,38,38],[217,119,6],[22,163,74]];
+  var seg = t < 0.5 ? 0 : 1;
+  var localT = t < 0.5 ? t / 0.5 : (t - 0.5) / 0.5;
+  var c0 = stops[seg], c1 = stops[seg + 1];
+  var r = Math.round(c0[0] + (c1[0] - c0[0]) * localT);
+  var g = Math.round(c0[1] + (c1[1] - c0[1]) * localT);
+  var b = Math.round(c0[2] + (c1[2] - c0[2]) * localT);
+  return `rgb(${r},${g},${b})`;
+}
+
+function heatLegendHtml(title, max, desc) {
+  return "<div class='legend-title'>" + title + "</div>" +
+    "<div class='heat-legend-bar' style='background:linear-gradient(to right, rgb(220,38,38), rgb(217,119,6), rgb(22,163,74))'></div>" +
+    "<div class='heat-legend-labels'><span>0</span><span>" + Math.round(max / 2) + "</span><span>" + max + "</span></div>" +
+    (desc ? "<div class='heat-legend-desc'>" + desc + "</div>" : "");
+}
+
+function renderRankingsTable() {
+  var rows = wardScores.slice();
+  if (rankFilter) {
+    var q = rankFilter.toLowerCase();
+    rows = rows.filter(r => r.ward_name.toLowerCase().includes(q));
+  }
+  rows.sort((a, b) => {
+    var av = a[rankSortCol] != null ? a[rankSortCol] : 0;
+    var bv = b[rankSortCol] != null ? b[rankSortCol] : 0;
+    return rankSortAsc
+      ? (typeof av === "string" ? av.localeCompare(bv) : av - bv)
+      : (typeof bv === "string" ? bv.localeCompare(av) : bv - av);
+  });
+  var tbody = document.getElementById("rankingsTbody");
+  if (!tbody) return;
+  if (!rows.length) {
+    tbody.innerHTML = "<tr><td colspan='11' style='padding:20px;text-align:center;color:#6B7280'>No rankings data available. Run analyse_wards.py first.</td></tr>";
+    return;
+  }
+  tbody.innerHTML = rows.map((r, i) => {
+    var c = scoreColor(r.composite_score || 0);
+    var w = r.ward_name.replace(/'/g, "\'");
+    return `<tr onclick="jumpToWard('${w}')">
+      <td>${i+1}</td><td>${r.ward_name}</td>
+      <td><span class='score-pill' style='background:${c}'>${(r.composite_score||0).toFixed(1)}</span></td>
+      <td>${r.stop_pca_400m_pct != null ? r.stop_pca_400m_pct.toFixed(1)+"%" : (r.stop_cov_500m_pct||0).toFixed(1)+"%"}</td>
+      <td class='col-secondary'>${r.stop_pca_800m_pct != null ? r.stop_pca_800m_pct.toFixed(1)+"%" : (r.stop_cov_250m_pct||0).toFixed(1)+"%"}</td>
+      <td class='col-secondary'>${r.route_count||0}</td><td class='col-secondary'>${r.stop_count||0}</td>
+      <td class='col-secondary'>${(r.ward_area_km2||0).toFixed(2)}</td>
+      <td class='col-secondary'>${r.effective_bus_reach != null ? r.effective_bus_reach.toFixed(1) : "—"}</td>
+      <td class='col-secondary'>${r.metro_access_pct != null ? r.metro_access_pct.toFixed(1)+"%" : "—"}</td>
+      <td class='col-secondary'>${r.terminal_access_pct != null ? r.terminal_access_pct.toFixed(1)+"%" : "—"}</td>
+    </tr>`;
+  }).join("");
+}
+
+const RANK_METRICS = [
+  {key:"composite_score",    label:"Composite score",      unit:"",  fixedMax:100, desc:"Effective bus reach (50%) — geometric mean of pedestrian walkability and office connectivity, so stops must be walkable AND serve useful destinations — plus metro access within 400 m walk (30%) and bus terminal proximity (20%). Wards that are walkable to useful routes AND near metro AND near a terminal score highest."},
+  {key:"stop_pca_400m_pct",  label:"PCA 400 m (5 min walk)", unit:"%", fixedMax:100, desc:"Pedestrian Catchment Area: % of the ward reachable within a 5-minute walk (400 m) of a bus stop, following actual streets. Unlike a simple circle, this accounts for dead ends and barriers — a more accurate measure of real walking access."},
+  {key:"stop_pca_800m_pct",  label:"PCA 800 m (10 min walk)", unit:"%", fixedMax:100, desc:"Pedestrian Catchment Area: % of the ward reachable within a 10-minute walk (800 m) of a bus stop, following actual streets. Captures residents willing to walk further to catch a bus."},
+];
+
+function p95(values) {
+  const sorted = values.filter(v => v != null).sort((a, b) => a - b);
+  return sorted[Math.floor(sorted.length * 0.95)] || sorted[sorted.length - 1] || 1;
+}
+
+function median(arr) {
+  if (!arr.length) return null;
+  const s = [...arr].sort((a, b) => a - b);
+  const m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
+
+function renderRankingsHeatmap() {
+  if (!wardsGeojson) return;
+
+  if (!rankingsHeatMap) {
+    rankingsHeatMap = L.map("rankingsHeatmap").setView([12.97, 77.59], 11);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution: "CartoDB"
+    }).addTo(rankingsHeatMap);
+
+    // Metric picker control (top-right)
+    const picker = L.control({position: "topright"});
+    picker.onAdd = () => {
+      const div = L.DomUtil.create("div", "legend");
+      div.style.cssText = "padding:10px 12px;min-width:170px";
+      div.innerHTML = "<div style='font-size:11px;font-weight:700;color:#374151;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em'>Show metric</div>" +
+        RANK_METRICS.map(m =>
+          `<label style="display:flex;align-items:center;gap:7px;font-size:12px;color:#374151;margin:4px 0;cursor:pointer;white-space:nowrap">
+            <input type="radio" name="rankMetric" value="${m.key}"${m.key === rankMetric ? " checked" : ""}> ${m.label}
+          </label>`
+        ).join("");
+      L.DomEvent.disableClickPropagation(div);
+      L.DomEvent.disableScrollPropagation(div);
+      div.querySelectorAll("input[type=radio]").forEach(radio => {
+        radio.addEventListener("change", () => {
+          rankMetric = radio.value;
+          updateRankingsHeatLayer();
+        });
+      });
+      return div;
+    };
+    picker.addTo(rankingsHeatMap);
+
+    // Legend (bottom-left, updated dynamically)
+    const legend = L.control({position: "bottomleft"});
+    legend.onAdd = () => {
+      const div = L.DomUtil.create("div", "legend heat-legend");
+      div.id = "rankingsHeatLegend";
+      return div;
+    };
+    legend.addTo(rankingsHeatMap);
+  }
+
+  updateRankingsHeatLayer();
+}
+
+function updateRankingsHeatLayer() {
+  if (!rankingsHeatMap || !wardScores.length) return;
+  const cfg = RANK_METRICS.find(m => m.key === rankMetric) || RANK_METRICS[0];
+  const values = wardScores.map(s => s[cfg.key]);
+  const max = cfg.fixedMax != null ? cfg.fixedMax : p95(values);
+  const byWard = {};
+  wardScores.forEach(s => { byWard[s.ward_name] = s[cfg.key]; });
+
+  if (rankingsHeatLayer) rankingsHeatMap.removeLayer(rankingsHeatLayer);
+  rankingsHeatLayer = L.geoJSON(wardsGeojson, {
+    style: feature => {
+      const v = byWard[feature.properties.ward_name];
+      return {
+        fillColor: v != null ? scoreToHeatColor(v, max) : "#E5E7EB",
+        fillOpacity: 0.75, color: "#fff", weight: 1,
+      };
+    },
+    onEachFeature: (feature, layer) => {
+      const v = byWard[feature.properties.ward_name];
+      const display = v != null ? (cfg.fixedMax === 100 ? v.toFixed(1) + cfg.unit : v.toFixed(2) + cfg.unit) : "—";
+      layer.bindTooltip(`${feature.properties.ward_name}: ${display}`, {sticky: true});
+    },
+  }).addTo(rankingsHeatMap);
+
+  const legendEl = document.getElementById("rankingsHeatLegend");
+  if (legendEl) legendEl.innerHTML = heatLegendHtml(cfg.label, max, cfg.desc);
+}
+
+function jumpToWard(wardName) {
+  switchTab("map");
+  showWard(wardName);
+}
+
+// --- Transit Hubs tab ---
+async function loadHubsIfNeeded() {
+  if (hubsLoaded) {
+    renderHubsTab();
+    if (desertViewMode === "map") renderDesertMap();
+    if (metroGapViewMode === "map") renderMetroGapMap();
+    return;
+  }
+  try {
+    [hubScoresData, metroGapsData] = await Promise.all([
+      fetchJSON(`${DATA_BASE_URL}/transit_hub_scores.json`),
+      fetchJSON(`${DATA_BASE_URL}/metro_feeder_gaps.json`),
+    ]);
+    hubsLoaded = true;
+    renderHubsTab();
+    if (desertViewMode === "map") renderDesertMap();
+    if (metroGapViewMode === "map") renderMetroGapMap();
+  } catch(e) {
+    document.getElementById("transferTbody").innerHTML =
+      `<tr><td colspan="6" style="padding:20px;text-align:center;color:#DC2626">Error: ${e.message}</td></tr>`;
+  }
+}
+
+function renderHubsTab() {
+  // Transfer deserts table
+  const deserts = (hubScoresData || [])
+    .filter(r => r.terminal_count === 0)
+    .sort((a, b) => (a.nearest_terminal_km || 99) - (b.nearest_terminal_km || 99));
+  document.getElementById("transferTbody").innerHTML = deserts.length
+    ? deserts.map((r, i) => {
+        const w = r.ward_name.replace(/'/g, "\'");
+        const metBus = r.has_metro_bus == null ? "—"
+          : r.has_metro_bus ? "<span style='color:#16A34A;font-weight:600'>Yes</span>"
+          : "<span style='color:#DC2626'>No</span>";
+        return `<tr onclick="jumpToWard('${w}')">
+          <td>${i+1}</td><td>${r.ward_name}</td>
+          <td>${r.nearest_terminal_km != null ? r.nearest_terminal_km.toFixed(1) : "—"}</td>
+          <td>${r.nearest_metro_km != null ? r.nearest_metro_km.toFixed(1) : "—"}</td>
+          <td>${metBus}</td>
+          <td>${r.office_area_count != null ? r.office_area_count : "—"}</td>
+        </tr>`;
+      }).join("")
+    : "<tr><td colspan='6' style='padding:16px;text-align:center;color:#16A34A'>All wards have at least one direct terminal connection.</td></tr>";
+
+  // Metro feeder gaps table
+  const gaps = ((metroGapsData || {}).stations || []).filter(s => s.feeder_gap);
+  document.getElementById("metroGapTbody").innerHTML = gaps.length
+    ? gaps.map((s, i) =>
+        `<tr><td>${i+1}</td><td>${s.station_name}</td>
+         <td>${s.bus_stop_count_400m}</td></tr>`
+      ).join("")
+    : "<tr><td colspan='3' style='padding:16px;text-align:center;color:#16A34A'>No feeder gaps found.</td></tr>";
+}
+
+function renderDesertMap() {
+  if (!wardsGeojson || !hubScoresData) return;
+  if (!desertLeafMap) {
+    desertLeafMap = L.map("desertMap").setView([12.97, 77.59], 11);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution: "CartoDB"
+    }).addTo(desertLeafMap);
+
+    const desertSet = new Set(
+      (hubScoresData || []).filter(r => r.terminal_count === 0).map(r => r.ward_name)
+    );
+
+    L.geoJSON(wardsGeojson, {
+      style: feature => {
+        const isDesert = desertSet.has(feature.properties.ward_name);
+        return {
+          fillColor: isDesert ? "#EF4444" : "#E5E7EB",
+          fillOpacity: isDesert ? 0.7 : 0.35,
+          color: "#fff",
+          weight: 1,
+        };
+      },
+      onEachFeature: (feature, layer) => {
+        const name = feature.properties.ward_name;
+        const isDesert = desertSet.has(name);
+        layer.bindTooltip(
+          isDesert ? `${name}: transfer desert` : name,
+          {sticky: true}
+        );
+        if (isDesert) layer.on("click", () => jumpToWard(name));
+      },
+    }).addTo(desertLeafMap);
+
+    const legend = L.control({position: "bottomleft"});
+    legend.onAdd = () => {
+      const div = L.DomUtil.create("div", "legend heat-legend");
+      div.innerHTML =
+        "<div class='legend-title'>Transfer deserts</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#EF4444'></span>Transfer desert (" + desertSet.size + " wards)</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#E5E7EB;border:1px solid #ccc'></span>Has terminal connection</div>" +
+        "<div class='heat-legend-desc'>No bus route from these wards begins or ends at a major terminal. Click a ward to jump to it on the Explore map.</div>";
+      return div;
+    };
+    legend.addTo(desertLeafMap);
+  }
+}
+
+function renderMetroGapMap() {
+  if (!metroGapsData) return;
+  if (!metroGapLeafMap) {
+    metroGapLeafMap = L.map("metroGapMap").setView([12.97, 77.59], 11);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution: "CartoDB"
+    }).addTo(metroGapLeafMap);
+
+    const stations = (metroGapsData || {}).stations || [];
+    stations.forEach(s => {
+      const isGap = s.feeder_gap;
+      if (isGap) {
+        L.circle([s.lat, s.lng], {
+          radius: 400,
+          color: "#EF4444",
+          fillColor: "#FCA5A5",
+          fillOpacity: 0.2,
+          weight: 1.5,
+          dashArray: "5 4",
+        }).addTo(metroGapLeafMap);
+      }
+      L.circleMarker([s.lat, s.lng], {
+        radius: isGap ? 10 : 6,
+        fillColor: isGap ? "#EF4444" : "#6B7280",
+        color: isGap ? "#B91C1C" : "#9CA3AF",
+        weight: 1.5,
+        fillOpacity: isGap ? 0.9 : 0.45,
+      }).bindTooltip(
+        isGap
+          ? `${s.station_name}: only ${s.bus_stop_count_400m} bus stop${s.bus_stop_count_400m === 1 ? "" : "s"} within 400 m`
+          : `${s.station_name}: ${s.bus_stop_count_400m} bus stops within 400 m`,
+        {sticky: true}
+      ).addTo(metroGapLeafMap);
+    });
+
+    const legend = L.control({position: "bottomleft"});
+    legend.onAdd = () => {
+      const div = L.DomUtil.create("div", "legend heat-legend");
+      div.innerHTML =
+        "<div class='legend-title'>Metro feeder access</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#EF4444;border-radius:50%'></span>Feeder gap (&lt; 3 bus stops)</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#6B7280;border-radius:50%;opacity:.45'></span>Adequate access</div>" +
+        "<div class='heat-legend-desc'>Dashed circle = 400 m walking radius around each gap station.</div>";
+      return div;
+    };
+    legend.addTo(metroGapLeafMap);
+  }
+}
+
+// --- Office Reach tab ---
+async function loadOfficeIfNeeded() {
+  if (officeLoaded) {
+    renderOfficeTab();
+    if (officeViewMode === "map") renderOfficeConnectivityMap();
+    return;
+  }
+  try {
+    const officeAreasBase = DATA_BASE_URL.endsWith("/data") ? DATA_BASE_URL.slice(0, -5) : DATA_BASE_URL;
+    const officeAreasUrl = officeAreasBase + "/datasets/office-areas.geojson";
+    const [connData, areasData, hopsData, scoresData, catchmentData] = await Promise.all([
+      fetchJSON(`${DATA_BASE_URL}/office_connectivity.json`),
+      fetchJSON(officeAreasUrl).catch(() => null),
+      fetchJSON(`${DATA_BASE_URL}/office_ward_hops.json`).catch(() => null),
+      fetchJSON(`${DATA_BASE_URL}/ward_scores.json`).catch(() => []),
+      fetchJSON(`${DATA_BASE_URL}/office_stop_catchments.json`).catch(() => null),
+    ]);
+    officeData = connData;
+    officeAreasGeojson = areasData;
+    officeHopsData = hopsData;
+    officeCatchmentData = catchmentData;
+    wardCoverage = {};
+    (scoresData || []).forEach(s => { wardCoverage[s.ward_name] = s.stop_pca_400m_pct ?? s.stop_cov_500m_pct; });
+    officeLoaded = true;
+    renderOfficeTab();
+    if (officeViewMode === "map") renderOfficeConnectivityMap();
+  } catch(e) {
+    document.getElementById("officeTbody").innerHTML =
+      `<tr><td colspan="11" style="padding:20px;text-align:center;color:#DC2626">Error: ${e.message}</td></tr>`;
+  }
+}
+
+function renderOfficeTab() {
+  const sorted = [...(officeData || [])].sort((a, b) => a.ward_direct_count - b.ward_direct_count);
+  const total = 369;
+  const catchById = {};
+  (officeCatchmentData || []).forEach(c => { catchById[c.office_id] = c; });
+  document.getElementById("officeTbody").innerHTML = sorted.map((o, i) => {
+    const pct = (o.ward_direct_count / total * 100).toFixed(1);
+    const pctColor = o.ward_direct_count / total >= 0.5 ? "#16A34A"
+                   : o.ward_direct_count / total >= 0.2 ? "#D97706" : "#DC2626";
+    const covVals = (o.wards_direct || []).map(w => wardCoverage[w]).filter(v => v != null);
+    const medCov = median(covVals);
+    const covStr = medCov != null ? medCov.toFixed(0) + "%" : "—";
+    const covColor = medCov == null ? "#6B7280"
+                   : medCov >= 50 ? "#16A34A"
+                   : medCov >= 30 ? "#D97706" : "#DC2626";
+    const ct = catchById[o.office_id];
+    const directCnt = ct ? (ct.direct_stops || []).length : "—";
+    const hop1Cnt   = ct ? (ct.hop1_bus_stops || []).length : "—";
+    const metroCnt  = ct ? (ct.metro_feeder_stops || []).length : "—";
+    return `<tr>
+      <td>${i+1}</td>
+      <td><strong>${o.office_name}</strong></td>
+      <td class="col-secondary" style="color:#6B7280;font-size:12px">${o.category || ""}</td>
+      <td>${o.stops_in_area}</td>
+      <td class="col-secondary">${(o.routes_in_area || []).length}</td>
+      <td>${o.ward_direct_count}</td>
+      <td><span class="score-pill" style="background:${pctColor}">${pct}%</span></td>
+      <td><span class="score-pill" style="background:${covColor}">${covStr}</span></td>
+      <td class="col-secondary">${directCnt}</td>
+      <td class="col-secondary">${hop1Cnt}</td>
+      <td class="col-secondary">${metroCnt}</td>
+    </tr>`;
+  }).join("");
+}
+
+// Click an office/industry cluster to highlight which wards have a direct
+// bus connection to it (uses office_connectivity.json's wards_direct list).
+function renderOfficeConnectivityMap() {
+  if (!officeAreasGeojson || !wardsGeojson) return;
+
+  if (!officeConnMap) {
+    officeConnMap = L.map("officeConnMap").setView([12.97, 77.59], 11);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution: "CartoDB"
+    }).addTo(officeConnMap);
+
+    officeWardLayer = L.geoJSON(wardsGeojson, {
+      style: () => ({fillColor: "#E5E7EB", fillOpacity: 0.5, color: "#fff", weight: 1}),
+      onEachFeature: (feature, layer) => {
+        layer.bindTooltip(feature.properties.ward_name, {sticky: true});
+      }
+    }).addTo(officeConnMap);
+
+    officeAreaLayer = L.geoJSON(officeAreasGeojson, {
+      style: () => ({fillColor: "#0891B2", fillOpacity: 0.3, color: "#0E7490", weight: 1.5}),
+      onEachFeature: (feature, layer) => {
+        layer.bindTooltip(feature.properties.name, {sticky: true});
+        layer.on("click", () => selectOfficeArea(feature.properties.id));
+      }
+    }).addTo(officeConnMap);
+
+    // "Wards | Catchment" view toggle (top-left inside map)
+    const viewCtrl = L.control({position:"topleft"});
+    viewCtrl.onAdd = () => {
+      const wrap = L.DomUtil.create("div");
+      wrap.style.cssText = "display:flex;flex-direction:column;gap:4px";
+
+      // Row 1: Wards / Bus Reach toggle
+      const row1 = document.createElement("div");
+      row1.className = "legend";
+      row1.style.cssText = "padding:6px 8px;display:flex;gap:4px";
+      ["wards", "catchment"].forEach(v => {
+        const btn = document.createElement("button");
+        btn.textContent = v === "wards" ? "Wards" : "Bus Reach";
+        btn.id = `officeMapViewBtn_${v}`;
+        btn.style.cssText = `padding:4px 10px;border-radius:4px;border:1px solid #D1D5DB;font-size:12px;cursor:pointer;font-weight:500;background:${officeMapView===v?"#0891B2":"#fff"};color:${officeMapView===v?"#fff":"#374151"}`;
+        btn.onclick = () => {
+          officeMapView = v;
+          row1.querySelectorAll("button").forEach(b => {
+            const active = b.id === `officeMapViewBtn_${v}`;
+            b.style.background = active ? "#0891B2" : "#fff";
+            b.style.color = active ? "#fff" : "#374151";
+          });
+          refreshOfficeConnectivity();
+        };
+        row1.appendChild(btn);
+      });
+      wrap.appendChild(row1);
+
+      // Row 2: PCA radius toggle (400m / 800m), only visible in Bus Reach mode
+      const row2 = document.createElement("div");
+      row2.className = "legend";
+      row2.id = "pcaRadiusCtrl";
+      row2.style.cssText = `padding:5px 8px;display:${officeMapView==="catchment"?"flex":"none"};gap:4px;align-items:center`;
+      const lbl = document.createElement("span");
+      lbl.style.cssText = "font-size:11px;color:#6B7280;margin-right:2px";
+      lbl.textContent = "Walk:";
+      row2.appendChild(lbl);
+      [400, 800].forEach(r => {
+        const btn = document.createElement("button");
+        btn.textContent = r === 400 ? "400 m (5 min)" : "800 m (10 min)";
+        btn.id = `pcaRadiusBtn_${r}`;
+        btn.style.cssText = `padding:3px 8px;border-radius:4px;border:1px solid #D1D5DB;font-size:11px;cursor:pointer;font-weight:500;background:${officePcaRadius===r?"#0891B2":"#fff"};color:${officePcaRadius===r?"#fff":"#374151"}`;
+        btn.onclick = () => {
+          officePcaRadius = r;
+          row2.querySelectorAll("button").forEach(b => {
+            const active = b.id === `pcaRadiusBtn_${r}`;
+            b.style.background = active ? "#0891B2" : "#fff";
+            b.style.color = active ? "#fff" : "#374151";
+          });
+          renderOfficeCatchment();
+          refreshCatchmentLegend();
+        };
+        row2.appendChild(btn);
+      });
+      wrap.appendChild(row2);
+
+      // Show/hide row2 when view changes
+      const origOnclick = row1.querySelectorAll("button");
+      origOnclick.forEach(btn => {
+        const prev = btn.onclick;
+        btn.onclick = (e) => {
+          prev.call(btn, e);
+          row2.style.display = officeMapView === "catchment" ? "flex" : "none";
+        };
+      });
+
+      L.DomEvent.disableClickPropagation(wrap);
+      L.DomEvent.disableScrollPropagation(wrap);
+      return wrap;
+    };
+    viewCtrl.addTo(officeConnMap);
+
+    const legend = L.control({position:"bottomleft"});
+    legend.onAdd = () => {
+      const div = L.DomUtil.create("div", "legend heat-legend");
+      div.id = "officeConnLegend";
+      return div;
+    };
+    legend.addTo(officeConnMap);
+  }
+
+  refreshOfficeConnectivity();
+}
+
+function selectOfficeArea(officeId) {
+  officeSelectedId = officeSelectedId === officeId ? null : officeId;
+  refreshOfficeConnectivity();
+}
+
+function renderOfficeCatchment() {
+  if (officeCatchmentLayer) {
+    officeConnMap.removeLayer(officeCatchmentLayer);
+    officeCatchmentLayer = null;
+  }
+  if (!officeSelectedId || !officeCatchmentData) return;
+  const entry = officeCatchmentData.find(o => o.office_id === officeSelectedId);
+  if (!entry) return;
+  officeCatchmentLayer = L.layerGroup();
+  const r = officePcaRadius;
+  const hasPca = !!(entry[`direct_pca_${r}`] && entry[`direct_pca_${r}`].length);
+
+  const cvs = L.canvas();
+  const addCircles = (stops, color, opacity) =>
+    (stops || []).forEach(([lat, lng]) =>
+      L.circle([lat, lng], {
+        radius: r, fillColor: color, fillOpacity: opacity,
+        color: color, weight: 0, renderer: cvs,
+      }).addTo(officeCatchmentLayer));
+
+  if (hasPca) {
+    // Render PCA polygons (street-network isochrones) for metro and direct bus.
+    // hop1 PCA is not pre-computed (covers the whole city), so fall back to circles.
+    const addPolygons = (pcas, color, opacity) =>
+      (pcas || []).forEach(ring => {
+        if (!ring || ring.length < 4) return;
+        L.polygon(ring.map(([lng, lat]) => [lat, lng]), {
+          fillColor: color, fillOpacity: opacity,
+          color: color, weight: 0.5, opacity: 0.3,
+        }).addTo(officeCatchmentLayer);
+      });
+    // Render bottom → top so direct-bus polygons are always on top
+    addPolygons(entry[`metro_pca_${r}`],  "#7C3AED", 0.18);  // purple = metro
+    addPolygons(entry[`hop1_pca_${r}`],  "#F97316", 0.16);  // orange = bus transfer
+    addPolygons(entry[`direct_pca_${r}`], "#16A34A", 0.22);  // green  = direct bus
+  } else {
+    // Fallback: all layers as circles when PCA data not yet computed
+    addCircles(entry.metro_feeder_stops, "#7C3AED", 0.20);
+    addCircles(entry.hop1_bus_stops,     "#F97316", 0.18);
+    addCircles(entry.direct_stops,       "#16A34A", 0.22);
+  }
+  officeCatchmentLayer.addTo(officeConnMap);
+}
+
+const HOP_COLORS = {0: "#16A34A", 1: "#FBBF24", 2: "#F97316", 3: "#DC2626"};
+const NO_DATA_COLOR = "#D1D5DB";
+
+function refreshCatchmentLegend() {
+  const legendEl = document.getElementById("officeConnLegend");
+  if (!legendEl) return;
+  const r = officePcaRadius;
+  const entry = (officeCatchmentData || []).find(o => o.office_id === officeSelectedId);
+  const hasPca = !!(entry && entry[`direct_pca_${r}`] && entry[`direct_pca_${r}`].length);
+  const walkLabel = r === 400 ? "5-min walk (400 m)" : "10-min walk (800 m)";
+  const shapeLabel = hasPca ? "street-network walking area" : `${r} m radius circle (PCA data pending)`;
+  if (!officeSelectedId) {
+    legendEl.innerHTML = "<div class='legend-title'>Bus Reach</div>" +
+      "<div class='heat-legend-desc'>Select an office cluster to see pedestrian catchment areas by access tier. Use the walk-distance toggle above to switch between 400 m (5 min) and 800 m (10 min).</div>";
+  } else {
+    const offName = entry ? entry.office_name : "";
+    const d  = entry ? (entry.direct_stops       || []).length : 0;
+    const h1 = entry ? (entry.hop1_bus_stops      || []).length : 0;
+    const mf = entry ? (entry.metro_feeder_stops  || []).length : 0;
+    legendEl.innerHTML =
+      "<div class='legend-title'>" + offName + "</div>" +
+      "<div class='legend-item'><span class='swatch' style='background:#16A34A;opacity:.7'></span>Direct bus</div>" +
+      (h1 ? "<div class='legend-item'><span class='swatch' style='background:#F97316;opacity:.6'></span>1 bus transfer</div>" : "") +
+      (mf ? "<div class='legend-item'><span class='swatch' style='background:#7C3AED;opacity:.6'></span>Metro with onward connection</div>" : "") +
+      "<div class='heat-legend-desc'>Each shape = area within a " + walkLabel + " of a stop, measured along actual streets. Green = direct bus to office. Orange = one transfer needed. Purple = metro with office connection.</div>";
+  }
+}
+
+function refreshOfficeConnectivity() {
+  if (!officeWardLayer || !officeAreaLayer) return;
+
+  // --- Bus Reach view ---
+  if (officeMapView === "catchment") {
+    // Ward layer: outlines only
+    officeWardLayer.eachLayer(layer => {
+      layer.setStyle({fillColor: "#E5E7EB", fillOpacity: 0, color: "#9CA3AF", weight: 0.8});
+      layer.setTooltipContent(layer.feature.properties.ward_name);
+    });
+    renderOfficeCatchment();
+    refreshCatchmentLegend();
+    // Office area highlight
+    officeAreaLayer.eachLayer(layer => {
+      const isSelected = layer.feature.properties.id === officeSelectedId;
+      layer.setStyle({fillColor:"#0891B2", fillOpacity: isSelected ? 0.45 : 0.2, color:"#0E7490", weight: isSelected ? 2.5 : 1.5});
+    });
+    return;
+  }
+
+  // --- Wards view (default) ---
+  // Clear catchment layer if switching back from catchment mode
+  if (officeCatchmentLayer) {
+    officeConnMap.removeLayer(officeCatchmentLayer);
+    officeCatchmentLayer = null;
+  }
+  const hopInfo = officeSelectedId
+    ? (officeHopsData || []).find(o => o.office_id === officeSelectedId)
+    : null;
+
+  officeWardLayer.eachLayer(layer => {
+    const name = layer.feature.properties.ward_name;
+    const cov = wardCoverage[name];
+    const covTag = cov != null ? ` · ${cov.toFixed(0)}% stop cov.` : "";
+    let fillColor, tooltip;
+    if (!hopInfo) {
+      fillColor = "#E5E7EB"; tooltip = name + covTag;
+    } else {
+      const hop = hopInfo.ward_hops[name];
+      if (hop === undefined) {
+        fillColor = NO_DATA_COLOR; tooltip = `${name}: no bus stop data`;
+      } else if (hop === 0) {
+        fillColor = HOP_COLORS[0]; tooltip = `${name}: direct${covTag}`;
+      } else {
+        fillColor = HOP_COLORS[Math.min(hop, 3)];
+        const label = hop >= 3 ? "3+ transfers" : `${hop} transfer${hop > 1 ? "s" : ""}`;
+        tooltip = `${name}: ${label} away${covTag}`;
+      }
+    }
+    layer.setStyle({
+      fillColor, fillOpacity: hopInfo ? 0.65 : 0.5,
+      color: "#fff", weight: 1,
+    });
+    layer.setTooltipContent(tooltip);
+  });
+
+  officeAreaLayer.eachLayer(layer => {
+    const isSelected = layer.feature.properties.id === officeSelectedId;
+    layer.setStyle({
+      fillColor: "#0891B2",
+      fillOpacity: isSelected ? 0.55 : 0.3,
+      color: "#0E7490",
+      weight: isSelected ? 3 : 1.5
+    });
+  });
+
+  const legendEl = document.getElementById("officeConnLegend");
+  if (legendEl) legendEl.innerHTML = officeConnLegendHtml(hopInfo);
+}
+
+function officeConnLegendHtml(hopInfo) {
+  if (!hopInfo) {
+    return "<div class='legend-title'>Office connectivity</div>" +
+      "<div class='legend-item'><span class='swatch' style='background:#0891B2;opacity:.4;border:1.5px solid #0E7490'></span>Office / industry cluster</div>" +
+      "<div class='heat-legend-desc'>Click a cluster to see how many bus transfers each ward needs to reach it.</div>";
+  }
+  const total = 369;
+  const counts = hopInfo.hop_counts || {};
+  const withData = Object.values(counts).reduce((a, b) => a + b, 0);
+  const noData = total - withData;
+  const rows = [
+    [HOP_COLORS[0], "Direct (0 hops)", counts["0"] || 0],
+    [HOP_COLORS[1], "1 transfer", counts["1"] || 0],
+    [HOP_COLORS[2], "2 transfers", counts["2"] || 0],
+    [HOP_COLORS[3], "3+ transfers", counts["3"] || 0],
+    [NO_DATA_COLOR, "No bus stop data", noData],
+  ];
+  const items = rows.filter(([, , n]) => n > 0).map(([color, label, n]) =>
+    `<div class='legend-item'><span class='swatch' style='background:${color}'></span>${label} (${n})</div>`
+  ).join("");
+  return "<div class='legend-title'>" + hopInfo.office_name + "</div>" + items +
+    "<div class='heat-legend-desc'>Hop count = minimum bus transfers (or bus&harr;metro interchanges) needed from a ward's routes to reach a route serving this cluster. Hover a ward for its stop coverage. Click the cluster again to deselect.</div>";
+}
+
+function downloadRankingsCSV() {
+  var cols = ["ward_name","ward_area_km2","route_count","stop_count",
+              "stop_pca_400m_pct","stop_pca_800m_pct",
+              "stop_cov_100m_pct","stop_cov_250m_pct","stop_cov_500m_pct",
+              "stops_per_km2","routes_per_km2","network_km_per_km2","composite_score",
+              "terminal_count","nearest_terminal_km",
+              "nearest_metro","nearest_metro_km","has_metro_bus","metro_feeder_gap",
+              "office_area_count","nearest_office_km"];
+  var header = cols.join(",");
+  var dataRows = wardScores.map(r => cols.map(c => {
+    const v = r[c];
+    if (v == null) return "";
+    if (typeof v === "boolean") return v ? "true" : "false";
+    return v;
+  }).join(","));
+  var blob = new Blob([[header, ...dataRows].join("\n")], {type:"text/csv"});
+  var a = Object.assign(document.createElement("a"),
+    {href: URL.createObjectURL(blob), download: "ward_scores.csv"});
+  a.click();
+}
+
+function downloadOfficeCSV() {
+  const total = 369;
+  const hopsById = {};
+  (officeHopsData || []).forEach(h => { hopsById[h.office_id] = h.hop_counts || {}; });
+  const catchById = {};
+  (officeCatchmentData || []).forEach(c => { catchById[c.office_id] = c; });
+  const cols = ["office_name", "category", "stops_in_area", "routes_in_area_count",
+                 "ward_direct_count", "pct_wards_connected",
+                 "hop_1_count", "hop_2_count", "hop_3_count", "no_data_count",
+                 "direct_reach_stops", "hop1_bus_stops", "metro_feeder_stops"];
+  const rows = (officeData || []).map(o => {
+    const hc = hopsById[o.office_id] || {};
+    const withData = Object.values(hc).reduce((a, b) => a + b, 0);
+    const ct = catchById[o.office_id];
+    return {
+      office_name: o.office_name,
+      category: o.category || "",
+      stops_in_area: o.stops_in_area,
+      routes_in_area_count: (o.routes_in_area || []).length,
+      ward_direct_count: o.ward_direct_count,
+      pct_wards_connected: (o.ward_direct_count / total * 100).toFixed(1),
+      hop_1_count: hc["1"] || 0,
+      hop_2_count: hc["2"] || 0,
+      hop_3_count: hc["3"] || 0,
+      no_data_count: total - withData,
+      direct_reach_stops: ct ? (ct.direct_stops || []).length : "",
+      hop1_bus_stops: ct ? (ct.hop1_bus_stops || []).length : "",
+      metro_feeder_stops: ct ? (ct.metro_feeder_stops || []).length : "",
+    };
+  });
+  const header = cols.join(",");
+  const dataRows = rows.map(r => cols.map(c => {
+    const v = r[c];
+    return (typeof v === "string" && v.includes(",")) ? `"${v}"` : v;
+  }).join(","));
+  const blob = new Blob([[header, ...dataRows].join("\n")], {type:"text/csv"});
+  const a = Object.assign(document.createElement("a"),
+    {href: URL.createObjectURL(blob), download: "office_reach.csv"});
+  a.click();
+}
+
+// --- Bootstrap ---
+async function init() {
+  infoEl().innerHTML = "Loading map data…";
+  try {
+    let scoresRaw;
+    [wardsGeojson, summary, scoresRaw] = await Promise.all([
+      fetchJSON(`${DATA_BASE_URL}/wards.geojson`),
+      fetchJSON(`${DATA_BASE_URL}/summary.json`),
+      fetchJSON(`${DATA_BASE_URL}/ward_scores.json`).catch(() => []),
+    ]);
+    if (scoresRaw && scoresRaw.length) {
+      wardScores = scoresRaw;
+      wardScoresLoaded = true;
+    }
+  } catch(e) {
+    infoEl().innerHTML = `<span style="color:#DC2626">Error loading initial data:<br>${e.message}</span>`;
+    return;
+  }
+
+  // fuzzy ward search
+  const wardNames = Object.keys(summary.ward_slugs).sort();
+  const searchInput = document.getElementById("wardSearch");
+  const searchDropdown = document.getElementById("wardDropdown");
+  if (searchInput && searchDropdown) {
+    function fuzzyMatch(query, candidate) {
+      const q = query.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const c = candidate.toLowerCase().replace(/[^a-z0-9]/g, "");
+      if (!q) return false;
+      if (c.includes(q)) return true;
+      let qi = 0;
+      for (let ci = 0; ci < c.length && qi < q.length; ci++) { if (c[ci] === q[qi]) qi++; }
+      return qi === q.length;
+    }
+    function showSearchDropdown(query) {
+      searchDropdown.innerHTML = "";
+      if (!query) { searchDropdown.style.display = "none"; return; }
+      const matches = wardNames.filter(w => fuzzyMatch(query, w)).slice(0, 10);
+      if (!matches.length) { searchDropdown.style.display = "none"; return; }
+      matches.forEach(w => {
+        const opt = document.createElement("div");
+        opt.textContent = w;
+        opt.style.cssText = "padding:7px 10px;cursor:pointer;font-size:13px;color:#374151;border-bottom:1px solid #F9FAFB";
+        opt.onmouseenter = () => { opt.style.background = "#F3F4F6"; };
+        opt.onmouseleave = () => { opt.style.background = ""; };
+        opt.onmousedown = e => { e.preventDefault(); searchInput.value = w; searchDropdown.style.display = "none"; showWard(w); };
+        searchDropdown.appendChild(opt);
+      });
+      searchDropdown.style.display = "block";
+    }
+    searchInput.oninput = () => showSearchDropdown(searchInput.value);
+    searchInput.onblur = () => setTimeout(() => { searchDropdown.style.display = "none"; }, 150);
+    searchInput.onkeydown = e => {
+      if (e.key === "Escape") searchDropdown.style.display = "none";
+      if (e.key === "Enter") {
+        const first = searchDropdown.firstChild;
+        if (first) { searchInput.value = first.textContent; searchDropdown.style.display = "none"; showWard(first.textContent); }
+      }
+    };
+  }
+
+  L.geoJSON(wardsGeojson, {
+    style: {color:"#9CA3AF", weight:0.8, fillOpacity:0},
+    onEachFeature(feature, layer) {
+      layer.on("click", () => { _pendingWardClick = feature.properties.ward_name; });
+    }
+  }).addTo(map);
+
+  // Wire rankings table headers
+  document.querySelectorAll(".rankings-table th[data-col]").forEach(th => {
+    th.addEventListener("click", () => {
+      const col = th.dataset.col;
+      if (rankSortCol === col) rankSortAsc = !rankSortAsc;
+      else { rankSortCol = col; rankSortAsc = col === "ward_name"; }
+      if (wardScoresLoaded) renderRankingsTable();
+    });
+  });
+  // Wire rankings search
+  const rankSearchEl = document.getElementById("rankSearch");
+  if (rankSearchEl) rankSearchEl.oninput = function() { rankFilter = this.value; if (wardScoresLoaded) renderRankingsTable(); };
+  // Wire CSV download
+  const dlBtn = document.getElementById("dlCsvBtn");
+  if (dlBtn) dlBtn.onclick = downloadRankingsCSV;
+  const dlOfficeBtn = document.getElementById("dlOfficeCsvBtn");
+  if (dlOfficeBtn) dlOfficeBtn.onclick = async () => {
+    if (!officeLoaded) await loadOfficeIfNeeded();
+    downloadOfficeCSV();
+  };
+
+  // Wire Table/Heatmap toggles
+  wireViewToggle("rankingsViewToggle", "rankingsTableWrap", "rankingsHeatmap",
+    v => { rankingsViewMode = v; }, renderRankingsHeatmap, () => rankingsHeatMap,
+    () => { if (!wardScoresLoaded) loadRankingsIfNeeded(); });
+  wireViewToggle("officeViewToggle", "officeTableWrap", "officeConnMap",
+    v => { officeViewMode = v; }, renderOfficeConnectivityMap, () => officeConnMap,
+    () => { if (!officeLoaded) loadOfficeIfNeeded(); });
+  wireViewToggle("desertViewToggle", "desertTableWrap", "desertMap",
+    v => { desertViewMode = v; }, renderDesertMap, () => desertLeafMap,
+    () => { if (!hubsLoaded) loadHubsIfNeeded(); });
+  wireViewToggle("metroGapViewToggle", "metroGapTableWrap", "metroGapMap",
+    v => { metroGapViewMode = v; }, renderMetroGapMap, () => metroGapLeafMap,
+    () => { if (!hubsLoaded) loadHubsIfNeeded(); });
+
+  infoEl().innerHTML = "<span style='color:#9CA3AF'>Select a ward to explore</span>";
+}
+
+init();
+</script>
+</body>
+</html>

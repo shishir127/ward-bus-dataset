@@ -68,6 +68,8 @@
   }
   .legend-title { font-size: 11px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
   .legend-item { display: flex; align-items: center; gap: 7px; }
+  /* Greyscale, softened basemap: OSM's colours otherwise compete with the data overlays */
+  .leaflet-tile-pane { filter: grayscale(100%) contrast(85%) brightness(108%); }
   .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 2px; flex-shrink: 0; }
   .swatch-line { display: inline-block; width: 18px; height: 3px; border-radius: 2px; flex-shrink: 0; }
   .route-btn {
@@ -403,17 +405,17 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 // Render order: residential (bottom) → catchment → routes → ward border (top)
 
 var residentialLayer = L.geoJSON(null, {
-    style: {weight:0, fillColor:"#FDE68A", fillOpacity:0.65}
+    style: {weight:0, fillColor:"#F59E0B", fillOpacity:0.5}
 }).addTo(map);
 
 var coverageLayer = L.geoJSON(null, {
-    style: {color:"#0891B2", weight:1.5, opacity:0.9, fillColor:"#BAE6FD", fillOpacity:0.35}
+    style: {color:"#1D4ED8", weight:2, opacity:1, fillColor:"#3B82F6", fillOpacity:0.28}
 }).addTo(map);
 
 var metroPcaLayer = L.layerGroup().addTo(map);
 
 var routeLayer = L.geoJSON(null, {
-    style: {color:"#991B1B", weight:1.5, opacity:0.8},
+    style: {color:"#DC2626", weight:2, opacity:0.75},
     onEachFeature: function(feature, layer) {
         var rid = feature.properties.kgisbmtcrootid
             ? "#" + Math.round(feature.properties.kgisbmtcrootid) + "  "
@@ -432,19 +434,24 @@ var wardLoadingHighlight = L.geoJSON(null, {
     style: {color:"#0891B2", weight:2, dashArray:"6 4", fillColor:"#0EA5E9", fillOpacity:0.1}
 }).addTo(map);
 
+// White halo under the ward outline keeps it readable over any background
+var wardHalo = L.geoJSON(null, {
+    style: {color:"#FFFFFF", weight:8, opacity:0.9, fill:false}
+}).addTo(map);
+
 var wardHighlight = L.geoJSON(null, {
-    style: {color:"#1F2937", weight:3, fill:false}
+    style: {color:"#111827", weight:3.5, fill:false}
 }).addTo(map);
 
 var highlightedRouteLayer = L.geoJSON(null, {
-    style: {color:"#FCD34D", weight:5, opacity:1, className:"route-direction"}
+    style: {color:"#DB2777", weight:5, opacity:1, className:"route-direction"}
 }).addTo(map);
 
 var stopLayer = L.geoJSON(null, {
     pointToLayer: function(feature, latlng) {
         return L.circleMarker(latlng, {
-            radius: 4, color: "#0369A1", weight: 1.5,
-            fillColor: "#38BDF8", fillOpacity: 0.85
+            radius: 5, color: "#111827", weight: 2,
+            fillColor: "#FFFFFF", fillOpacity: 1
         });
     },
     onEachFeature: function(feature, layer) {
@@ -463,13 +470,13 @@ legend.onAdd = function(){
     var div = L.DomUtil.create("div","legend");
     div.innerHTML =
         "<div class='legend-title'>Legend</div>" +
-        "<div class='legend-item'><span class='swatch-line' style='background:#991B1B'></span>Bus routes</div>" +
-        "<div class='legend-item'><span class='swatch' style='background:#BAE6FD;border:1.5px solid #0891B2'></span>Catchment area</div>" +
-        "<div class='legend-item'><span class='swatch' style='background:#FDE68A'></span>Residential areas</div>" +
-        "<div class='legend-item'><span class='swatch' style='background:#38BDF8;border:1.5px solid #0369A1;border-radius:50%;width:10px;height:10px'></span>Bus stops</div>" +
-        "<div class='legend-item'><span class='swatch' style='background:#A78BFA;border:2.5px solid #6D28D9;border-radius:50%;width:10px;height:10px'></span>Metro stations</div>" +
-        "<div class='legend-item'><span class='swatch' style='background:#3B82F6;border:2.5px solid #1E3A8A;border-radius:50%;width:10px;height:10px'></span>Bus terminals</div>" +
-        "<div class='legend-item'><span class='swatch' style='background:none;border:2.5px solid #1F2937'></span>Selected ward</div>";
+        "<div class='legend-item'><span class='swatch-line' style='background:#DC2626'></span>Bus routes</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:rgba(59,130,246,0.28);border:2px solid #1D4ED8'></span>Catchment area</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:rgba(245,158,11,0.5)'></span>Residential areas</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#FFFFFF;border:2px solid #111827;border-radius:50%;width:10px;height:10px'></span>Bus stops</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#7C3AED;border:2px solid #FFFFFF;box-shadow:0 0 0 1px #7C3AED;border-radius:50%;width:10px;height:10px'></span>Metro stations</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:#0F766E;border:2px solid #FFFFFF;box-shadow:0 0 0 1px #0F766E;border-radius:50%;width:10px;height:10px'></span>Bus terminals</div>" +
+        "<div class='legend-item'><span class='swatch' style='background:none;border:3px solid #111827;box-shadow:0 0 0 2px #FFFFFF'></span>Selected ward</div>";
     return div;
 };
 legend.addTo(map);
@@ -481,8 +488,8 @@ var showMetro = true;
 var metroLayer = L.geoJSON(_metroData, {
     pointToLayer: function(feature, latlng) {
         return L.circleMarker(latlng, {
-            radius: 7, color: "#6D28D9", weight: 2.5,
-            fillColor: "#A78BFA", fillOpacity: 0.9
+            radius: 8, color: "#FFFFFF", weight: 2.5,
+            fillColor: "#7C3AED", fillOpacity: 1
         });
     },
     onEachFeature: function(feature, layer) {
@@ -498,8 +505,8 @@ var showTerminals = true;
 var terminalLayer = L.geoJSON(_terminalData, {
     pointToLayer: function(feature, latlng) {
         return L.circleMarker(latlng, {
-            radius: 7, color: "#1E3A8A", weight: 2.5,
-            fillColor: "#3B82F6", fillOpacity: 0.9
+            radius: 8, color: "#FFFFFF", weight: 2.5,
+            fillColor: "#0F766E", fillOpacity: 1
         });
     },
     onEachFeature: function(feature, layer) {
@@ -738,6 +745,7 @@ function renderWard(wardName, wardData) {
   metroPcaLayer.clearLayers();
   routeLayer.clearLayers();
   wardHighlight.clearLayers();
+  wardHalo.clearLayers();
   highlightedRouteLayer.clearLayers();
   stopLayer.clearLayers();
 
@@ -760,7 +768,7 @@ function renderWard(wardName, wardData) {
   if (showStops && wardData.stops_geojson) stopLayer.addData(wardData.stops_geojson);
 
   wardsGeojson.features.forEach(f => {
-    if (f.properties.ward_name === wardName) wardHighlight.addData(f);
+    if (f.properties.ward_name === wardName) { wardHalo.addData(f); wardHighlight.addData(f); }
   });
   if (wardHighlight.getBounds().isValid()) map.fitBounds(wardHighlight.getBounds(), {padding:[50,50]});
 
@@ -771,7 +779,7 @@ function renderWard(wardName, wardData) {
       if (!bounds.contains([st.lat, st.lng])) return;
       if (!st.pca_400 || st.pca_400.length < 3) return;
       L.polygon(st.pca_400.map(([lng, lat]) => [lat, lng]), {
-        color: "#7C3AED", weight: 1.5, fillColor: "#7C3AED", fillOpacity: 0.20
+        color: "#7C3AED", weight: 2, fillColor: "#7C3AED", fillOpacity: 0.18
       }).bindTooltip(st.name + " (Metro — 400 m walk)", {sticky: true}).addTo(metroPcaLayer);
     });
   }

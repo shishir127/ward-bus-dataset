@@ -393,8 +393,9 @@
 const DATA_BASE_URL = "https://raw.githubusercontent.com/shishir127/ward-bus-dataset/main/data";
 
 const map = L.map("map").setView([12.97, 77.59], 11);
-L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-  attribution: "CartoDB"
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19,
+  attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
 }).addTo(map);
 
 
@@ -1132,8 +1133,9 @@ function renderRankingsHeatmap() {
 
   if (!rankingsHeatMap) {
     rankingsHeatMap = L.map("rankingsHeatmap").setView([12.97, 77.59], 11);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-      attribution: "CartoDB"
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
     }).addTo(rankingsHeatMap);
 
     // Metric picker control (top-right)
@@ -1263,8 +1265,9 @@ function renderDesertMap() {
   if (!wardsGeojson || !hubScoresData) return;
   if (!desertLeafMap) {
     desertLeafMap = L.map("desertMap").setView([12.97, 77.59], 11);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-      attribution: "CartoDB"
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
     }).addTo(desertLeafMap);
 
     const desertSet = new Set(
@@ -1310,8 +1313,9 @@ function renderMetroGapMap() {
   if (!metroGapsData) return;
   if (!metroGapLeafMap) {
     metroGapLeafMap = L.map("metroGapMap").setView([12.97, 77.59], 11);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-      attribution: "CartoDB"
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
     }).addTo(metroGapLeafMap);
 
     const stations = (metroGapsData || {}).stations || [];
@@ -1429,8 +1433,9 @@ function renderOfficeConnectivityMap() {
 
   if (!officeConnMap) {
     officeConnMap = L.map("officeConnMap").setView([12.97, 77.59], 11);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-      attribution: "CartoDB"
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
     }).addTo(officeConnMap);
 
     officeWardLayer = L.geoJSON(wardsGeojson, {
